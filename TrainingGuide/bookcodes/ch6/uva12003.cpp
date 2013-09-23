@@ -22,14 +22,14 @@ void init() {
 }
 
 int query(int L, int R, int v) {
-  int lb = L/SIZE, rb = R/SIZE; // LºÍRËùÔÚ¿é±àºÅ
+  int lb = L/SIZE, rb = R/SIZE; // Lå’ŒRæ‰€åœ¨å—ç¼–å·
   int k = 0;
   if(lb == rb) {
     for(int i = L; i <= R; i++) if(A[i] < v) k++;
   } else {
-    for(int i = L; i < (lb+1)*SIZE; i++) if(A[i] < v) k++; // µÚÒ»¿é
-    for(int i = rb*SIZE; i <= R; i++) if(A[i] < v) k++; // ×îºóÒ»¿é
-    for(int b = lb+1; b < rb; b++) // ÖĞ¼äµÄÍêÕû¿é
+    for(int i = L; i < (lb+1)*SIZE; i++) if(A[i] < v) k++; // ç¬¬ä¸€å—
+    for(int i = rb*SIZE; i <= R; i++) if(A[i] < v) k++; // æœ€åä¸€å—
+    for(int b = lb+1; b < rb; b++) // ä¸­é—´çš„å®Œæ•´å—
       k += lower_bound(block[b], block[b]+SIZE, v) - block[b];
   }
   return k;
@@ -37,13 +37,13 @@ int query(int L, int R, int v) {
 
 void change(int p, int x) {
   if(A[p] == x) return;
-  int old = A[p], pos = 0, *B = &block[p/SIZE][0]; // B¾ÍÊÇpËùÔÚµÄ¿é
+  int old = A[p], pos = 0, *B = &block[p/SIZE][0]; // Bå°±æ˜¯pæ‰€åœ¨çš„å—
   A[p] = x;
 
-  while(B[pos] < old) pos++; B[pos] = x; // ÕÒµ½xÔÚ¿éÖĞµÄÎ»ÖÃ
-  if(x > old) // xÌ«´ó£¬Íùºó½»»»
+  while(B[pos] < old) pos++; B[pos] = x; // æ‰¾åˆ°xåœ¨å—ä¸­çš„ä½ç½®
+  if(x > old) // xå¤ªå¤§ï¼Œå¾€åäº¤æ¢
     while(pos < SIZE-1 && B[pos] > B[pos+1]) { swap(B[pos+1], B[pos]); pos++; }
-  else // ÍùÇ°½»»»
+  else // å¾€å‰äº¤æ¢
     while(pos > 0 && B[pos] < B[pos-1]) { swap(B[pos-1], B[pos]); pos--; }
 }
 

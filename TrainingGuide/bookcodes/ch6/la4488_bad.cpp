@@ -1,4 +1,4 @@
-// LA4488 Final Combat：错误版（书中用来锻炼静态差错）
+// LA4488 Final Combat锛氶敊璇増锛堜功涓敤鏉ラ敾鐐奸潤鎬佸樊閿欙級
 // Rujia Liu
 #include<iostream>
 #include<vector>

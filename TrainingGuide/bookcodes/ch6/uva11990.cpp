@@ -9,15 +9,15 @@ using namespace std;
 inline int lowbit(int x) { return x&-x; }
 
 struct Node {
-  Node *ch[2]; // ×óÓÒ×ÓÊ÷
-  int v; // Öµ
-  int s; // ½áµã×ÜÊı¡£ÓĞÉ¾³ı±ê¼ÇµÄ½áµãÎ´Í³¼ÆÔÚÄÚ
-  int d; // É¾³ı±ê¼Ç
+  Node *ch[2]; // å·¦å³å­æ ‘
+  int v; // å€¼
+  int s; // ç»“ç‚¹æ€»æ•°ã€‚æœ‰åˆ é™¤æ ‡è®°çš„ç»“ç‚¹æœªç»Ÿè®¡åœ¨å†…
+  int d; // åˆ é™¤æ ‡è®°
   Node():d(0) {}
   int ch_s(int d) { return ch[d] == NULL ? 0 : ch[d]->s; }
 };
 
-// Ãû´ÎÊ÷£¬ÀÁÉ¾³ıÊµÏÖ
+// åæ¬¡æ ‘ï¼Œæ‡’åˆ é™¤å®ç°
 struct RankTree {
   int n, next;
   int *v;
@@ -43,8 +43,8 @@ struct RankTree {
     return &nodes[u];
   }
 
-  // type = 0£ºÍ³¼Æ±ÈvĞ¡µÄÔªËØ¸öÊı
-  // type = 1£ºÍ³¼Æ±Èv´óµÄÔªËØ¸öÊı  
+  // type = 0ï¼šç»Ÿè®¡æ¯”vå°çš„å…ƒç´ ä¸ªæ•°
+  // type = 1ï¼šç»Ÿè®¡æ¯”vå¤§çš„å…ƒç´ ä¸ªæ•°  
   int count(int v, int type) {
     Node* u = root;
     int cnt = 0;
@@ -57,7 +57,7 @@ struct RankTree {
     return cnt;
   }
 
-  // Òª±£Ö¤vÔÚÊ÷ÖĞÇÒÉĞÎ´É¾³ı
+  // è¦ä¿è¯våœ¨æ ‘ä¸­ä¸”å°šæœªåˆ é™¤
   void erase(int v) {
     Node* u = root;
     while(u != NULL) {
@@ -74,14 +74,14 @@ struct RankTree {
   }
 };
 
-// Ç¶Ì×Ãû´ÎÊ÷µÄFenwickÊ÷
+// åµŒå¥—åæ¬¡æ ‘çš„Fenwickæ ‘
 struct FenwickRankTree {
   int n;
   vector<RankTree*> C;
 
   void init(int n, int* A) {
     this->n = n;
-    C.resize(n+1); // ´æ·ÅÔÚC[1]~C[n]
+    C.resize(n+1); // å­˜æ”¾åœ¨C[1]~C[n]
     for(int i = 1; i <= n; i++) {
       C[i] = new RankTree(lowbit(i), A+i-lowbit(i)+1);
     }
@@ -89,7 +89,7 @@ struct FenwickRankTree {
 
   void clear() { for(int i = 1; i <= n; i++) delete C[i]; }
 
-  // Í³¼ÆA[1], A[2], ..., A[x]ÓĞ¶àÉÙ¸öÔªËØ±Èv´ó(x<=n)
+  // ç»Ÿè®¡A[1], A[2], ..., A[x]æœ‰å¤šå°‘ä¸ªå…ƒç´ æ¯”vå¤§(x<=n)
   int count(int x, int v, int type) {
     int ret = 0;
     while(x > 0) {
@@ -98,7 +98,7 @@ struct FenwickRankTree {
     return ret;
   }
 
-  // É¾³ıA[x]=v
+  // åˆ é™¤A[x]=v
   void erase(int x, int v) {
     while(x <= n) {
       C[x]->erase(v); x += lowbit(x);
@@ -106,7 +106,7 @@ struct FenwickRankTree {
   }
 };
 
-// ÆÕÍ¨FenwickÊ÷
+// æ™®é€šFenwickæ ‘
 struct FenwickTree {
   int n;
   vector<int> C;
@@ -117,7 +117,7 @@ struct FenwickTree {
     fill(C.begin(), C.end(), 0);
   }
 
-  // ¼ÆËãA[1]+A[2]+...+A[x] (x<=n)
+  // è®¡ç®—A[1]+A[2]+...+A[x] (x<=n)
   int sum(int x) {
     int ret = 0;
     while(x > 0) {
@@ -140,7 +140,7 @@ typedef long long LL;
 
 int n, m, A[maxn], B[maxn], pos[maxn];
 FenwickRankTree frt;
-FenwickTree f; // ÓÃÀ´ÇóÄæĞò¶ÔÊıÒÔ¼°ÇóÒÑÉ¾³ıµÄÔªËØÓĞ¶àÉÙ¸ö±ÈvĞ¡
+FenwickTree f; // ç”¨æ¥æ±‚é€†åºå¯¹æ•°ä»¥åŠæ±‚å·²åˆ é™¤çš„å…ƒç´ æœ‰å¤šå°‘ä¸ªæ¯”vå°
 
 LL inversion_pairs() {
   LL ans = 0;
@@ -166,12 +166,12 @@ int main() {
       int x;
       scanf("%d", &x);
       f.add(x, 1);
-      int a = frt.count(pos[x]-1, x, 1); // x×ó±ßÓĞa¸ö±Èx´ó
-      int b = x-1; // Ò»¹²ÓĞx-1¸öÊı±ÈxĞ¡
-      int c = f.sum(x-1); // É¾ÁËc¸ö±ÈxĞ¡µÄ
-      int d = frt.count(pos[x]-1, x, 0);  // ÏÖÔÚ×ó±ßÓĞd¸ö±ÈxĞ¡
-      b -= c + d;  // »¹Ê£b¸ö
-      cnt -= a + b; // ÄæĞò¶Ô¼õÉÙa+b¸ö
+      int a = frt.count(pos[x]-1, x, 1); // xå·¦è¾¹æœ‰aä¸ªæ¯”xå¤§
+      int b = x-1; // ä¸€å…±æœ‰x-1ä¸ªæ•°æ¯”xå°
+      int c = f.sum(x-1); // åˆ äº†cä¸ªæ¯”xå°çš„
+      int d = frt.count(pos[x]-1, x, 0);  // ç°åœ¨å·¦è¾¹æœ‰dä¸ªæ¯”xå°
+      b -= c + d;  // è¿˜å‰©bä¸ª
+      cnt -= a + b; // é€†åºå¯¹å‡å°‘a+bä¸ª
       frt.erase(pos[x], x);
     }
   }

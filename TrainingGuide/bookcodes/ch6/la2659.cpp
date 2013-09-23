@@ -10,20 +10,20 @@ const int maxr = 5000;
 const int maxn = 2000;
 const int maxnode = 20000;
 
-// ĞĞ±àºÅ´Ó1¿ªÊ¼£¬ÁĞ±àºÅÎª1~n£¬½áµã0ÊÇ±íÍ·½áµã; ½áµã1~nÊÇ¸÷ÁĞ¶¥²¿µÄĞéÄâ½áµã
+// è¡Œç¼–å·ä»1å¼€å§‹ï¼Œåˆ—ç¼–å·ä¸º1~nï¼Œç»“ç‚¹0æ˜¯è¡¨å¤´ç»“ç‚¹; ç»“ç‚¹1~næ˜¯å„åˆ—é¡¶éƒ¨çš„è™šæ‹Ÿç»“ç‚¹
 struct DLX {
-  int n, sz; // ÁĞÊı£¬½áµã×ÜÊı
-  int S[maxn]; // ¸÷ÁĞ½áµãÊı
+  int n, sz; // åˆ—æ•°ï¼Œç»“ç‚¹æ€»æ•°
+  int S[maxn]; // å„åˆ—ç»“ç‚¹æ•°
 
-  int row[maxnode], col[maxnode]; // ¸÷½áµãĞĞÁĞ±àºÅ
-  int L[maxnode], R[maxnode], U[maxnode], D[maxnode]; // Ê®×ÖÁ´±í
+  int row[maxnode], col[maxnode]; // å„ç»“ç‚¹è¡Œåˆ—ç¼–å·
+  int L[maxnode], R[maxnode], U[maxnode], D[maxnode]; // åå­—é“¾è¡¨
 
-  int ansd, ans[maxr]; // ½â
+  int ansd, ans[maxr]; // è§£
 
-  void init(int n) { // nÊÇÁĞÊı
+  void init(int n) { // næ˜¯åˆ—æ•°
     this->n = n;
 
-    // ĞéÄâ½áµã
+    // è™šæ‹Ÿç»“ç‚¹
     for(int i = 0 ; i <= n; i++) {
       U[i] = i; D[i] = i; L[i] = i-1, R[i] = i+1;
     }
@@ -45,7 +45,7 @@ struct DLX {
     R[sz - 1] = first; L[first] = sz - 1;
   }
 
-  // Ë³×ÅÁ´±íA£¬±éÀú³ısÍâµÄÆäËûÔªËØ
+  // é¡ºç€é“¾è¡¨Aï¼Œéå†é™¤så¤–çš„å…¶ä»–å…ƒç´ 
   #define FOR(i,A,s) for(int i = A[s]; i != s; i = A[i]) 
 
   void remove(int c) {
@@ -62,25 +62,25 @@ struct DLX {
     R[L[c]] = c;
   }
 
-  // dÎªµİ¹éÉî¶È
+  // dä¸ºé€’å½’æ·±åº¦
   bool dfs(int d) {
-    if (R[0] == 0) { // ÕÒµ½½â
-      ansd = d; // ¼ÇÂ¼½âµÄ³¤¶È
+    if (R[0] == 0) { // æ‰¾åˆ°è§£
+      ansd = d; // è®°å½•è§£çš„é•¿åº¦
       return true;
     }
 
-    // ÕÒS×îĞ¡µÄÁĞc
-    int c = R[0]; // µÚÒ»¸öÎ´É¾³ıµÄÁĞ
+    // æ‰¾Sæœ€å°çš„åˆ—c
+    int c = R[0]; // ç¬¬ä¸€ä¸ªæœªåˆ é™¤çš„åˆ—
     FOR(i,R,0) if(S[i] < S[c]) c = i;
 
-    remove(c); // É¾³ıµÚcÁĞ
-    FOR(i,D,c) { // ÓÃ½áµãiËùÔÚĞĞ¸²¸ÇµÚcÁĞ
+    remove(c); // åˆ é™¤ç¬¬cåˆ—
+    FOR(i,D,c) { // ç”¨ç»“ç‚¹iæ‰€åœ¨è¡Œè¦†ç›–ç¬¬cåˆ—
       ans[d] = row[i];
-      FOR(j,R,i) remove(col[j]); // É¾³ı½áµãiËùÔÚĞĞÄÜ¸²¸ÇµÄËùÓĞÆäËûÁĞ
+      FOR(j,R,i) remove(col[j]); // åˆ é™¤ç»“ç‚¹iæ‰€åœ¨è¡Œèƒ½è¦†ç›–çš„æ‰€æœ‰å…¶ä»–åˆ—
       if(dfs(d+1)) return true;
-      FOR(j,L,i) restore(col[j]); // »Ö¸´½áµãiËùÔÚĞĞÄÜ¸²¸ÇµÄËùÓĞÆäËûÁĞ
+      FOR(j,L,i) restore(col[j]); // æ¢å¤ç»“ç‚¹iæ‰€åœ¨è¡Œèƒ½è¦†ç›–çš„æ‰€æœ‰å…¶ä»–åˆ—
     }
-    restore(c); // »Ö¸´µÚcÁĞ
+    restore(c); // æ¢å¤ç¬¬cåˆ—
 
     return false;
   }
@@ -94,7 +94,7 @@ struct DLX {
 
 };
 
-////////////// ÌâÄ¿Ïà¹Ø
+////////////// é¢˜ç›®ç›¸å…³
 #include<cassert>
 
 DLX solver;
@@ -104,7 +104,7 @@ const int ROW = 1;
 const int COL = 2;
 const int SUB = 3;
 
-// ĞĞ/ÁĞµÄÍ³Ò»±à½âÂëº¯Êı¡£´Ó1¿ªÊ¼±àºÅ
+// è¡Œ/åˆ—çš„ç»Ÿä¸€ç¼–è§£ç å‡½æ•°ã€‚ä»1å¼€å§‹ç¼–å·
 int encode(int a, int b, int c) {
   return a*256+b*16+c+1;
 }

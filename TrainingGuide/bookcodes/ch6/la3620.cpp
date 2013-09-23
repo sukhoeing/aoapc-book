@@ -10,33 +10,33 @@ const int INF = 100000000;
 int nrows, ncols;
 int G[10][10];
 
-// ²åÍ·±àºÅ£º0±íÊ¾ÎŞ²åÍ·£¬1±íÊ¾ºÍÊı×Ö2Á¬Í¨£¬2±íÊ¾ºÍÊı×Ö3Á¬Í¨
+// æ’å¤´ç¼–å·ï¼š0è¡¨ç¤ºæ— æ’å¤´ï¼Œ1è¡¨ç¤ºå’Œæ•°å­—2è¿é€šï¼Œ2è¡¨ç¤ºå’Œæ•°å­—3è¿é€š
 
 struct State {
-  int up[9]; // up[i](0<=i<m)±íÊ¾µÚiÁĞ´¦ÂÖÀªÏßÉÏ·½µÄ²åÍ·±àºÅ
-  int left; // µ±Ç°¸ñ£¨¼´ÏÂÒ»¸öÒª·ÅÖÃµÄ·½¸ñ£©×ó²àµÄ²åÍ·
+  int up[9]; // up[i](0<=i<m)è¡¨ç¤ºç¬¬iåˆ—å¤„è½®å»“çº¿ä¸Šæ–¹çš„æ’å¤´ç¼–å·
+  int left; // å½“å‰æ ¼ï¼ˆå³ä¸‹ä¸€ä¸ªè¦æ”¾ç½®çš„æ–¹æ ¼ï¼‰å·¦ä¾§çš„æ’å¤´
 
-  // Èı½øÖÆ±àÂë
+  // ä¸‰è¿›åˆ¶ç¼–ç 
   int encode() const {
     int key = left;
     for(int i = 0; i < ncols; i++) key = key * 3 + up[i];
     return key;
   }
 
-  // ÔÚ(row,col)´¦·ÅÒ»¸öĞÂ·½¸ñ¡£UDLR·Ö±ğÎª¸Ã·½¸ñÉÏÏÂ×óÓÒËÄ¸ö±ß½çÉÏµÄ²åÍ·±àºÅ
-  // ²úÉúµÄĞÂ×´Ì¬´æ·ÅÔÚTÀï£¬³É¹¦·µ»Øtrue£¬Ê§°Ü·µ»Øfalse
+  // åœ¨(row,col)å¤„æ”¾ä¸€ä¸ªæ–°æ–¹æ ¼ã€‚UDLRåˆ†åˆ«ä¸ºè¯¥æ–¹æ ¼ä¸Šä¸‹å·¦å³å››ä¸ªè¾¹ç•Œä¸Šçš„æ’å¤´ç¼–å·
+  // äº§ç”Ÿçš„æ–°çŠ¶æ€å­˜æ”¾åœ¨Té‡Œï¼ŒæˆåŠŸè¿”å›trueï¼Œå¤±è´¥è¿”å›false
   bool next(int row, int col, int U, int D, int L, int R, State& T) const {
-    if(row == nrows - 1 && D != 0) return false; // ×îÏÂĞĞÏÂ·½²»ÄÜÓĞ²åÍ·
-    if(col == ncols - 1 && R != 0) return false; // ×îÓÒÁĞÓÒ±ß²»ÄÜÓĞ²åÍ·
+    if(row == nrows - 1 && D != 0) return false; // æœ€ä¸‹è¡Œä¸‹æ–¹ä¸èƒ½æœ‰æ’å¤´
+    if(col == ncols - 1 && R != 0) return false; // æœ€å³åˆ—å³è¾¹ä¸èƒ½æœ‰æ’å¤´
 
-    int must_left = (col > 0 && left != 0); // ÊÇ·ñ±ØĞëÒªÓĞ×ó²åÍ·
-    int must_up = (row > 0 && up[col] != 0); // ÊÇ·ñ±ØĞëÒªÓĞÉÏ²åÍ·
+    int must_left = (col > 0 && left != 0); // æ˜¯å¦å¿…é¡»è¦æœ‰å·¦æ’å¤´
+    int must_up = (row > 0 && up[col] != 0); // æ˜¯å¦å¿…é¡»è¦æœ‰ä¸Šæ’å¤´
 
-    if((must_left && L != left) || (!must_left && L != 0)) return false; // ×ó²åÍ·²»Æ¥Åä
-    if((must_up && U != up[col]) || (!must_up && U != 0)) return false; // ÉÏ²åÍ·²»Æ¥Åä
-    if(must_left && must_up && left != up[col]) return false; // Èô×ó²åÍ·ºÍÉÏ²åÍ·¶¼´æÔÚ£¬¶şÕß±ØĞëÆ¥Åä
+    if((must_left && L != left) || (!must_left && L != 0)) return false; // å·¦æ’å¤´ä¸åŒ¹é…
+    if((must_up && U != up[col]) || (!must_up && U != 0)) return false; // ä¸Šæ’å¤´ä¸åŒ¹é…
+    if(must_left && must_up && left != up[col]) return false; // è‹¥å·¦æ’å¤´å’Œä¸Šæ’å¤´éƒ½å­˜åœ¨ï¼ŒäºŒè€…å¿…é¡»åŒ¹é…
 
-    // ²úÉúĞÂ×´Ì¬¡£Êµ¼ÊÉÏÖ»ÓĞµ±Ç°ÁĞµÄÏÂ²åÍ·ºÍleft²åÍ·ÓĞ±ä»¯
+    // äº§ç”Ÿæ–°çŠ¶æ€ã€‚å®é™…ä¸Šåªæœ‰å½“å‰åˆ—çš„ä¸‹æ’å¤´å’Œleftæ’å¤´æœ‰å˜åŒ–
     for(int i = 0; i < ncols; i++) T.up[i] = up[i];
     T.up[col] = D;
     T.left = R;
@@ -46,7 +46,7 @@ struct State {
 
 int memo[9][9][59049]; // 3^10
 
-// µ±Ç°Òª·ÅÖÃ¸ñ×Ó(row, col)£¬×´Ì¬ÎªS¡£·µ»Ø×îĞ¡×Ü³¤¶È
+// å½“å‰è¦æ”¾ç½®æ ¼å­(row, col)ï¼ŒçŠ¶æ€ä¸ºSã€‚è¿”å›æœ€å°æ€»é•¿åº¦
 int rec(int row, int col, const State& S) {
   if(col == ncols) { col = 0; row++; }
   if(row == nrows) return 0;
@@ -57,25 +57,25 @@ int rec(int row, int col, const State& S) {
   res = INF;
 
   State T;
-  if(G[row][col] <= 1) { // ¿Õ¸ñ£¨0£©»òÕßÕÏ°­¸ñ£¨1£©
-    if(S.next(row, col, 0, 0, 0, 0, T)) res = min(res, rec(row, col+1, T)); // Õû¸ö¸ñ×ÓÀï¶¼²»Á¬Ïß
-    if(G[row][col] == 0) // Èç¹ûÊÇ¿Õ¸ñ£¬¿ÉÒÔÁ¬Ïß¡£ÓÉÓÚÏß²»ÄÜ·Ö²æ£¬ËùÒÔÕâÌõÏßÒ»¶¨Á¬½Ó¸ñ×ÓµÄÄ³Á½¸ö±ß½ç£¨6ÖÖÇé¿ö£©
-      for(int t = 1; t <= 2; t++) { // Ã¶¾ÙÏßµÄÖÖÀà¡£t=1±íÊ¾2Ïß£¬t=2±íÊ¾3Ïß
-        if(S.next(row, col, t, t, 0, 0, T)) res = min(res, rec(row, col+1, T) + 2); // ÉÏ<->ÏÂ
-        if(S.next(row, col, t, 0, t, 0, T)) res = min(res, rec(row, col+1, T) + 2); // ÉÏ<->×ó
-        if(S.next(row, col, t, 0, 0, t, T)) res = min(res, rec(row, col+1, T) + 2); // ÉÏ<->ÓÒ
-        if(S.next(row, col, 0, t, t, 0, T)) res = min(res, rec(row, col+1, T) + 2); // ÏÂ<->×ó
-        if(S.next(row, col, 0, t, 0, t, T)) res = min(res, rec(row, col+1, T) + 2); // ÏÂ<->ÓÒ
-        if(S.next(row, col, 0, 0, t, t, T)) res = min(res, rec(row, col+1, T) + 2); // ×ó<->ÓÒ
+  if(G[row][col] <= 1) { // ç©ºæ ¼ï¼ˆ0ï¼‰æˆ–è€…éšœç¢æ ¼ï¼ˆ1ï¼‰
+    if(S.next(row, col, 0, 0, 0, 0, T)) res = min(res, rec(row, col+1, T)); // æ•´ä¸ªæ ¼å­é‡Œéƒ½ä¸è¿çº¿
+    if(G[row][col] == 0) // å¦‚æœæ˜¯ç©ºæ ¼ï¼Œå¯ä»¥è¿çº¿ã€‚ç”±äºçº¿ä¸èƒ½åˆ†å‰ï¼Œæ‰€ä»¥è¿™æ¡çº¿ä¸€å®šè¿æ¥æ ¼å­çš„æŸä¸¤ä¸ªè¾¹ç•Œï¼ˆ6ç§æƒ…å†µï¼‰
+      for(int t = 1; t <= 2; t++) { // æšä¸¾çº¿çš„ç§ç±»ã€‚t=1è¡¨ç¤º2çº¿ï¼Œt=2è¡¨ç¤º3çº¿
+        if(S.next(row, col, t, t, 0, 0, T)) res = min(res, rec(row, col+1, T) + 2); // ä¸Š<->ä¸‹
+        if(S.next(row, col, t, 0, t, 0, T)) res = min(res, rec(row, col+1, T) + 2); // ä¸Š<->å·¦
+        if(S.next(row, col, t, 0, 0, t, T)) res = min(res, rec(row, col+1, T) + 2); // ä¸Š<->å³
+        if(S.next(row, col, 0, t, t, 0, T)) res = min(res, rec(row, col+1, T) + 2); // ä¸‹<->å·¦
+        if(S.next(row, col, 0, t, 0, t, T)) res = min(res, rec(row, col+1, T) + 2); // ä¸‹<->å³
+        if(S.next(row, col, 0, 0, t, t, T)) res = min(res, rec(row, col+1, T) + 2); // å·¦<->å³
       }
   }
   else {
-    int t = G[row][col] - 1; // Êı×ÖÎª2ºÍ3£¬µ«²åÍ·ÀàĞÍÊÇ1ºÍ2£¬ËùÒÔÒª¼õ1
-    // ÓÉÓÚÏß²»ÄÜ·Ö²æ£¬ËùÒÔÕâÌõÏßÒ»¶¨Á¬½Ó¸ñ×ÓÖĞ¼äµÄÊı×ÖºÍÄ³Ò»¸ö±ß½ç£¨4ÖÖÇé¿ö£©
-    if(S.next(row, col, t, 0, 0, 0, T)) res = min(res, rec(row, col+1, T) + 1); // ´ÓÉÏ±ß½ç³öÀ´
-    if(S.next(row, col, 0, t, 0, 0, T)) res = min(res, rec(row, col+1, T) + 1); // ´ÓÏÂ±ß½ç³öÀ´
-    if(S.next(row, col, 0, 0, t, 0, T)) res = min(res, rec(row, col+1, T) + 1); // ´Ó×ó±ß½ç³öÀ´
-    if(S.next(row, col, 0, 0, 0, t, T)) res = min(res, rec(row, col+1, T) + 1); // ´ÓÓÒ±ß½ç³öÀ´
+    int t = G[row][col] - 1; // æ•°å­—ä¸º2å’Œ3ï¼Œä½†æ’å¤´ç±»å‹æ˜¯1å’Œ2ï¼Œæ‰€ä»¥è¦å‡1
+    // ç”±äºçº¿ä¸èƒ½åˆ†å‰ï¼Œæ‰€ä»¥è¿™æ¡çº¿ä¸€å®šè¿æ¥æ ¼å­ä¸­é—´çš„æ•°å­—å’ŒæŸä¸€ä¸ªè¾¹ç•Œï¼ˆ4ç§æƒ…å†µï¼‰
+    if(S.next(row, col, t, 0, 0, 0, T)) res = min(res, rec(row, col+1, T) + 1); // ä»ä¸Šè¾¹ç•Œå‡ºæ¥
+    if(S.next(row, col, 0, t, 0, 0, T)) res = min(res, rec(row, col+1, T) + 1); // ä»ä¸‹è¾¹ç•Œå‡ºæ¥
+    if(S.next(row, col, 0, 0, t, 0, T)) res = min(res, rec(row, col+1, T) + 1); // ä»å·¦è¾¹ç•Œå‡ºæ¥
+    if(S.next(row, col, 0, 0, 0, t, T)) res = min(res, rec(row, col+1, T) + 1); // ä»å³è¾¹ç•Œå‡ºæ¥
   }
   return res;
 }

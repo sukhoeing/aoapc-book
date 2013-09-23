@@ -8,7 +8,7 @@
 using namespace std;
 
 const double INF = 1e9;
-const int maxn = 5200; // Ã¿Á½¸öÔ²×î¶àÓĞ4ÌõÇĞÏß£¬×ÜµãÊı²»»á³¬¹ı50*49/2*4 + 50*2*2 + 2 =5102
+const int maxn = 5200; // æ¯ä¸¤ä¸ªåœ†æœ€å¤šæœ‰4æ¡åˆ‡çº¿ï¼Œæ€»ç‚¹æ•°ä¸ä¼šè¶…è¿‡50*49/2*4 + 50*2*2 + 2 =5102
 
 struct Edge {
   int from, to;
@@ -27,9 +27,9 @@ struct Dijkstra {
   int n, m;
   vector<Edge> edges;
   vector<int> G[maxn];
-  bool done[maxn];    // ÊÇ·ñÒÑÓÀ¾Ã±êºÅ
-  double d[maxn];     // sµ½¸÷¸öµãµÄ¾àÀë
-  int p[maxn];        // ×î¶ÌÂ·ÖĞµÄÉÏÒ»Ìõ»¡
+  bool done[maxn];    // æ˜¯å¦å·²æ°¸ä¹…æ ‡å·
+  double d[maxn];     // såˆ°å„ä¸ªç‚¹çš„è·ç¦»
+  int p[maxn];        // æœ€çŸ­è·¯ä¸­çš„ä¸Šä¸€æ¡å¼§
 
   void init(int n) {
     this->n = n;
@@ -92,8 +92,8 @@ Vector operator - (Point A, Point B) { return Vector(A.x-B.x, A.y-B.y); }
 Vector operator * (Vector A, double p) { return Vector(A.x*p, A.y*p); }
 Vector operator / (Vector A, double p) { return Vector(A.x/p, A.y/p); }
 
-// ÀíÂÛÉÏÕâ¸ö¡°Ğ¡ÓÚ¡±ÔËËã·ûÊÇ´íµÄ£¬ÒòÎª¿ÉÄÜÓĞÈı¸öµãa, b, c, aºÍbºÜ½Ó½ü£¨¼´a<bºÃb<a¶¼²»³ÉÁ¢£©£¬bºÍcºÜ½Ó½ü£¬µ«aºÍc²»½Ó½ü
-// ËùÒÔÊ¹ÓÃÕâÖÖ¡°Ğ¡ÓÚ¡±ÔËËã·ûµÄÇ°ÌáÊÇÄÜÅÅ³ıÉÏÊöÇé¿ö
+// ç†è®ºä¸Šè¿™ä¸ªâ€œå°äºâ€è¿ç®—ç¬¦æ˜¯é”™çš„ï¼Œå› ä¸ºå¯èƒ½æœ‰ä¸‰ä¸ªç‚¹a, b, c, aå’Œbå¾ˆæ¥è¿‘ï¼ˆå³a<bå¥½b<aéƒ½ä¸æˆç«‹ï¼‰ï¼Œbå’Œcå¾ˆæ¥è¿‘ï¼Œä½†aå’Œcä¸æ¥è¿‘
+// æ‰€ä»¥ä½¿ç”¨è¿™ç§â€œå°äºâ€è¿ç®—ç¬¦çš„å‰ææ˜¯èƒ½æ’é™¤ä¸Šè¿°æƒ…å†µ
 bool operator < (const Point& a, const Point& b) {
   return dcmp(a.x - b.x) < 0 || (dcmp(a.x - b.x) == 0 && dcmp(a.y - b.y) < 0);
 }
@@ -126,12 +126,12 @@ double DistanceToSegment(const Point& P, const Point& A, const Point& B) {
   else return fabs(Cross(v1, v2)) / Length(v1);
 }
 
-// ¹ıµãpµ½Ô²CµÄÇĞÏß¡£v[i]ÊÇµÚiÌõÇĞÏßµÄÏòÁ¿¡£·µ»ØÇĞÏßÌõÊı
+// è¿‡ç‚¹påˆ°åœ†Cçš„åˆ‡çº¿ã€‚v[i]æ˜¯ç¬¬iæ¡åˆ‡çº¿çš„å‘é‡ã€‚è¿”å›åˆ‡çº¿æ¡æ•°
 int getTangents(Point p, Point c, double r, vector<Vector>& v) {
   Vector u = c - p;
   double dist = Length(u);
   if(dist < r) return 0;
-  else if(dcmp(dist - r) == 0) { // pÔÚÔ²ÉÏ£¬Ö»ÓĞÒ»ÌõÇĞÏß
+  else if(dcmp(dist - r) == 0) { // påœ¨åœ†ä¸Šï¼Œåªæœ‰ä¸€æ¡åˆ‡çº¿
     v.push_back(Rotate(u, PI/2));
     return 1;
   } else {
@@ -142,8 +142,8 @@ int getTangents(Point p, Point c, double r, vector<Vector>& v) {
   }
 }
 
-// µãµ½Ô²µÄÇĞµã¡£·µ»ØÇĞµã¸öÊı
-// ¿ÉÒÔ¶ÔgetTangentsº¯ÊıÉÔ×öĞŞ¸ÄÇó³öÇĞµã£¬²»¹ıÕâÀïÍµÁË¸öÀÁ£¬Çó³öÔ²ĞÄÔÚÇĞÏßÉÏµÄÍ¶Ó°£¬¾ÍÊÇÇĞµã
+// ç‚¹åˆ°åœ†çš„åˆ‡ç‚¹ã€‚è¿”å›åˆ‡ç‚¹ä¸ªæ•°
+// å¯ä»¥å¯¹getTangentså‡½æ•°ç¨åšä¿®æ”¹æ±‚å‡ºåˆ‡ç‚¹ï¼Œä¸è¿‡è¿™é‡Œå·äº†ä¸ªæ‡’ï¼Œæ±‚å‡ºåœ†å¿ƒåœ¨åˆ‡çº¿ä¸Šçš„æŠ•å½±ï¼Œå°±æ˜¯åˆ‡ç‚¹
 int getTangentPoints(Point p, Point c, double r, vector<Point>& out) {
   vector<Vector> v;
   int cnt = getTangents(p, c, r, v);
@@ -152,35 +152,35 @@ int getTangentPoints(Point p, Point c, double r, vector<Point>& out) {
   return cnt;
 }
 
-// È¡Ô²(C, r)»¡¶ÈÎªradµÄµã
+// å–åœ†(C, r)å¼§åº¦ä¸ºradçš„ç‚¹
 Point getCirclePoint(Point C, double r, double rad) {
   return Point(C.x + cos(rad)*r, C.y + sin(rad)*r);
 }
 
-// ·µ»ØÔ²ºÍÔ²µÄÇĞÏßµÄÌõÊı¡£-1±íÊ¾ÎŞÇî¶àÌõÇĞÏß¡£
-// a[i]ºÍb[i]·Ö±ğÊÇµÚiÌõÇĞÏßÔÚÔ²(c1, r1)ºÍÔ²(c2, r2)ÉÏµÄÇĞµã
+// è¿”å›åœ†å’Œåœ†çš„åˆ‡çº¿çš„æ¡æ•°ã€‚-1è¡¨ç¤ºæ— ç©·å¤šæ¡åˆ‡çº¿ã€‚
+// a[i]å’Œb[i]åˆ†åˆ«æ˜¯ç¬¬iæ¡åˆ‡çº¿åœ¨åœ†(c1, r1)å’Œåœ†(c2, r2)ä¸Šçš„åˆ‡ç‚¹
 int getTangentPoints(Point c1, double r1, Point c2, double r2, Point* a, Point* b) {
   int cnt = 0;
   if(r1 < r2) { swap(c1, c2); swap(r1, r2); swap(a, b); }
   int d2 = (c1.x-c2.x)*(c1.x-c2.x) + (c1.y-c2.y)*(c1.y-c2.y);
   int rdiff = r1-r2;
   int rsum = r1+r2;
-  if(d2 < rdiff*rdiff) return 0; // ÄÚº¬
+  if(d2 < rdiff*rdiff) return 0; // å†…å«
 
   double base = atan2(c2.y-c1.y, c2.x-c1.x);
-  if(d2 == 0 && r1 == r2) return -1; // ÎŞÏŞ¶àÌõÇĞÏß
-  if(d2 == rdiff*rdiff) { // ÄÚÇĞ£¬1ÌõÇĞÏß
+  if(d2 == 0 && r1 == r2) return -1; // æ— é™å¤šæ¡åˆ‡çº¿
+  if(d2 == rdiff*rdiff) { // å†…åˆ‡ï¼Œ1æ¡åˆ‡çº¿
     a[cnt] = getCirclePoint(c1, r1, base); b[cnt] = getCirclePoint(c2, r2, base); cnt++;
     return 1;
   }
-  // ÓĞÍâ¹«ÇĞÏß
+  // æœ‰å¤–å…¬åˆ‡çº¿
   double ang = acos((r1-r2) / sqrt(d2));
   a[cnt] = getCirclePoint(c1, r1, base+ang); b[cnt] = getCirclePoint(c2, r2, base+ang); cnt++;
   a[cnt] = getCirclePoint(c1, r1, base-ang); b[cnt] = getCirclePoint(c2, r2, base-ang); cnt++;
-  if(d2 == rsum*rsum) { // Ò»ÌõÄÚ¹«ÇĞÏß
+  if(d2 == rsum*rsum) { // ä¸€æ¡å†…å…¬åˆ‡çº¿
     a[cnt] = getCirclePoint(c1, r1, base); b[cnt] = getCirclePoint(c2, r2, PI+base); cnt++;
   }
-  else if(d2 > rsum*rsum) { // Á½ÌõÄÚ¹«ÇĞÏß
+  else if(d2 > rsum*rsum) { // ä¸¤æ¡å†…å…¬åˆ‡çº¿
     double ang = acos((r1+r2) / sqrt(d2));
     a[cnt] = getCirclePoint(c1, r1, base+ang); b[cnt] = getCirclePoint(c2, r2, PI+base+ang); cnt++;
     a[cnt] = getCirclePoint(c1, r1, base-ang); b[cnt] = getCirclePoint(c2, r2, PI+base-ang); cnt++;
@@ -188,40 +188,40 @@ int getTangentPoints(Point c1, double r1, Point c2, double r2, Point* a, Point* 
   return cnt;
 }
 
-////////////// ÌâÄ¿Ïà¹Ø
+////////////// é¢˜ç›®ç›¸å…³
 #include<map>
 const int maxp = 50 + 10;
 
-int n;                    // ÕÏ°­µÄ¸öÊı
-Point C[maxp], src, dest; // ÕÏ°­Ô²ĞÄ£¬ÆğµãºÍÖÕµã
-double r[maxp];           // ÕÏ°­°ë¾¶
+int n;                    // éšœç¢çš„ä¸ªæ•°
+Point C[maxp], src, dest; // éšœç¢åœ†å¿ƒï¼Œèµ·ç‚¹å’Œç»ˆç‚¹
+double r[maxp];           // éšœç¢åŠå¾„
 
-vector<Edge> e;           // ÁÙÊ±±ßÊı×é
-vector<Point> points;     // ÓÃÀ´¹¹Í¼µÄµã£¨Æğµã¡¢ÖÕµã¡¢ÇĞµã£©
-map<Point, int> idx;      // µãµ½Í¼µÄ½áµã±àºÅµÄÓ³Éä
+vector<Edge> e;           // ä¸´æ—¶è¾¹æ•°ç»„
+vector<Point> points;     // ç”¨æ¥æ„å›¾çš„ç‚¹ï¼ˆèµ·ç‚¹ã€ç»ˆç‚¹ã€åˆ‡ç‚¹ï¼‰
+map<Point, int> idx;      // ç‚¹åˆ°å›¾çš„ç»“ç‚¹ç¼–å·çš„æ˜ å°„
 
 Dijkstra dijkstra;
 
-// ·µ»ØµãpÓ³Éäµ½µÄ±àºÅ
+// è¿”å›ç‚¹pæ˜ å°„åˆ°çš„ç¼–å·
 int ID(Point p) {
   if(idx.count(p)) return idx[p];
   points.push_back(p);
   idx[p] = points.size() - 1;
 }
 
-// ¼ì²éµãaµ½µãbµÄÏß¶ÎÊÇ·ñ²»ºÍÈÎÒâÔ²Ïà½»£¬ÇÒ×î¶àºÍmaxtangent¸öÔ²ÏàÇĞ¡£
-// Èç¹ûÊÇ£¬¼Ó±ßa-b
+// æ£€æŸ¥ç‚¹aåˆ°ç‚¹bçš„çº¿æ®µæ˜¯å¦ä¸å’Œä»»æ„åœ†ç›¸äº¤ï¼Œä¸”æœ€å¤šå’Œmaxtangentä¸ªåœ†ç›¸åˆ‡ã€‚
+// å¦‚æœæ˜¯ï¼ŒåŠ è¾¹a-b
 void checkSegment(Point a, Point b, int maxtangent) {
   for(int i = 0; i < n; i++) {
     int d = dcmp(DistanceToSegment(C[i], a, b) - r[i]);
-    if(d < 0) return; // Ô²iºÍÏß¶ÎabÏà½»
-    if(d == 0) { if(maxtangent-- == 0) return; } // Ô²iºÍÏß¶ÎabÏàÇĞ£¬Í³¼Æ¸öÊı
+    if(d < 0) return; // åœ†iå’Œçº¿æ®µabç›¸äº¤
+    if(d == 0) { if(maxtangent-- == 0) return; } // åœ†iå’Œçº¿æ®µabç›¸åˆ‡ï¼Œç»Ÿè®¡ä¸ªæ•°
   }
   int ia = ID(a), ib = ID(b);
   if(ia >= 0 && ib >= 0 && ia != ib) e.push_back((Edge){ia, ib, Length(a-b)});
 }
 
-// ¼ì²éÆğµã»òÖÕµãµ½Ã¿¸öÔ²µÄÁ½ÌõÇĞÏß£¨ÒòÎªÆğµãºÍÖÕµãÑÏ¸ñÔÚÔ²Íâ£¬ËùÒÔÇ¡ºÃÓĞÁ½ÌõÇĞÏß£©
+// æ£€æŸ¥èµ·ç‚¹æˆ–ç»ˆç‚¹åˆ°æ¯ä¸ªåœ†çš„ä¸¤æ¡åˆ‡çº¿ï¼ˆå› ä¸ºèµ·ç‚¹å’Œç»ˆç‚¹ä¸¥æ ¼åœ¨åœ†å¤–ï¼Œæ‰€ä»¥æ°å¥½æœ‰ä¸¤æ¡åˆ‡çº¿ï¼‰
 void checkPointToCircle(Point p) {
   for(int i = 0; i < n; i++) {
     vector<Point> t;
@@ -231,8 +231,8 @@ void checkPointToCircle(Point p) {
   }
 }
 
-// ¼ì²éÁ½¸öÔ²µÄ×î¶àËÄÌõÇĞÏß
-// ±¾ÌâÖĞµÄÔ²ºÍÔ²Ö»»áÍâÇĞºÍÏàÀë£¬µ«ÎªÁËÑİÊ¾Ä£°åµÄÓÃ·¨£¬ÈÔÈ»Ê¹ÓÃÁË¡°Î´É¾½Ú°æ¡±µÄÔ²ºÍÔ²ÇóÇĞÏßµÄ·½·¨ ;-)
+// æ£€æŸ¥ä¸¤ä¸ªåœ†çš„æœ€å¤šå››æ¡åˆ‡çº¿
+// æœ¬é¢˜ä¸­çš„åœ†å’Œåœ†åªä¼šå¤–åˆ‡å’Œç›¸ç¦»ï¼Œä½†ä¸ºäº†æ¼”ç¤ºæ¨¡æ¿çš„ç”¨æ³•ï¼Œä»ç„¶ä½¿ç”¨äº†â€œæœªåˆ èŠ‚ç‰ˆâ€çš„åœ†å’Œåœ†æ±‚åˆ‡çº¿çš„æ–¹æ³• ;-)
 void checkCircleToCircle() {
   for(int i = 0; i < n; i++)
     for(int j = i+1; j < n; j++) {
@@ -243,14 +243,14 @@ void checkCircleToCircle() {
     }
 }
 
-// Í¬Ò»¸öÔ²ÉÏÏàÁÚÁ½µãÁ¬Ò»Ìõ±ß
+// åŒä¸€ä¸ªåœ†ä¸Šç›¸é‚»ä¸¤ç‚¹è¿ä¸€æ¡è¾¹
 void checkPointOnCircle() {
   for(int i = 0; i < n; i++) {
-    vector<double> on; // Ô²iÉÏËùÓĞµãµÄ¼«½Ç
+    vector<double> on; // åœ†iä¸Šæ‰€æœ‰ç‚¹çš„æè§’
     int m = points.size();
     for(int j = 0; j < m; j++)
       if(dcmp(Length(points[j] - C[i]) - r[i]) == 0) on.push_back(angle(points[j] - C[i]));
-    if(on.size() < 2) continue; // ÖÁÉÙÒªÓĞÁ½¸öµã²ÅÓĞÒâÒå
+    if(on.size() < 2) continue; // è‡³å°‘è¦æœ‰ä¸¤ä¸ªç‚¹æ‰æœ‰æ„ä¹‰
 
     sort(on.begin(), on.end());
     on.erase(unique(on.begin(), on.end()), on.end());
@@ -265,7 +265,7 @@ void checkPointOnCircle() {
   }
 }
 
-// pÊÇ·ñÖÁÉÙÔÚÁ½¸öÔ²ÖÜÉÏ£¨ÕâÑùµÄ»°£¬Õâ¸öµã½«²»ÄÜÁ¬±ß£©
+// pæ˜¯å¦è‡³å°‘åœ¨ä¸¤ä¸ªåœ†å‘¨ä¸Šï¼ˆè¿™æ ·çš„è¯ï¼Œè¿™ä¸ªç‚¹å°†ä¸èƒ½è¿è¾¹ï¼‰
 bool isForbidden(Point p) {
   int cnt = 0;
   for(int i = 0; i < n; i++)
@@ -275,17 +275,17 @@ bool isForbidden(Point p) {
 }
 
 /*
-  ¸ù¾İÌâÒâ£º
-  1. ÆğµãºÍÖÕµãÑÏ¸ñÔÚÔ²Íâ
-  2. ÕÏ°­Ô²²»»áÏà½»£¬µ«¿ÉÄÜÍâÇĞ£¬¶øÇĞµã²»ÄÜÍ¨¹ı¡£
-  ¼Ù¶¨Á½¸öÕÏ°­Ô²ÍâÇĞ¡£ËäÈ»¿ÉÒÔ¡°ÈÆ×ÅÇĞµã×ß¡±¶ø²»´©¹ıÇĞµã£¬µ«ÕâÑù×ö¿Ï¶¨²»ÊÇ×îÓÅµÄ
-  ËùÒÔ¡°ÔÚÖÁÉÙ2¸öÔ²ÖÜÉÏ¡±µÄµã¿Ï¶¨²»ÔÚ×îÓÅÂ·¾¶ÉÏ£¬ÊôÓÚ¡°·Ïµã¡± ;-)
+  æ ¹æ®é¢˜æ„ï¼š
+  1. èµ·ç‚¹å’Œç»ˆç‚¹ä¸¥æ ¼åœ¨åœ†å¤–
+  2. éšœç¢åœ†ä¸ä¼šç›¸äº¤ï¼Œä½†å¯èƒ½å¤–åˆ‡ï¼Œè€Œåˆ‡ç‚¹ä¸èƒ½é€šè¿‡ã€‚
+  å‡å®šä¸¤ä¸ªéšœç¢åœ†å¤–åˆ‡ã€‚è™½ç„¶å¯ä»¥â€œç»•ç€åˆ‡ç‚¹èµ°â€è€Œä¸ç©¿è¿‡åˆ‡ç‚¹ï¼Œä½†è¿™æ ·åšè‚¯å®šä¸æ˜¯æœ€ä¼˜çš„
+  æ‰€ä»¥â€œåœ¨è‡³å°‘2ä¸ªåœ†å‘¨ä¸Šâ€çš„ç‚¹è‚¯å®šä¸åœ¨æœ€ä¼˜è·¯å¾„ä¸Šï¼Œå±äºâ€œåºŸç‚¹â€ ;-)
 
-  ÄÇÃ´£¬ÊÇ·ñ¿ÉÒÔÔÚID(p)ÀïÖ±½ÓÅĞ¶ÏpÊÇ·ñÖÁÉÙÔÚ2¸öÔ²ÖÜÉÏ£¬Èç¹ûÊÇÔò·µ»Ø-1£¬´ú±íÕâ¸öµã²»ÄÜÒª£¿²»ĞĞ¡£
-  ¼Ù¶¨ÓĞÒ»¸öÔ²ÉÏÓĞÈı¸öµãa, b, c£¬ÆäÖĞbÔÚÖÁÉÙ2¸öÔ²ÖÜÉÏ¡£
-  Èç¹ûÔçÔçµÄÉ¾³ıÁËµãb£¬ÔÚcheckPointOnCircle()ÖĞ»áÈÏÎªÔ²ÉÏÖ»ÓĞÁ½¸öµãaºÍc£¬È»ºóÁ¬Ò»Ìõ±ß¡£µ«ÕâÌõ±ßÊµ¼ÊÉÏ´©¹ıÁËµãb£¬Òò´Ë·Ç·¨£¡
+  é‚£ä¹ˆï¼Œæ˜¯å¦å¯ä»¥åœ¨ID(p)é‡Œç›´æ¥åˆ¤æ–­pæ˜¯å¦è‡³å°‘åœ¨2ä¸ªåœ†å‘¨ä¸Šï¼Œå¦‚æœæ˜¯åˆ™è¿”å›-1ï¼Œä»£è¡¨è¿™ä¸ªç‚¹ä¸èƒ½è¦ï¼Ÿä¸è¡Œã€‚
+  å‡å®šæœ‰ä¸€ä¸ªåœ†ä¸Šæœ‰ä¸‰ä¸ªç‚¹a, b, cï¼Œå…¶ä¸­båœ¨è‡³å°‘2ä¸ªåœ†å‘¨ä¸Šã€‚
+  å¦‚æœæ—©æ—©çš„åˆ é™¤äº†ç‚¹bï¼Œåœ¨checkPointOnCircle()ä¸­ä¼šè®¤ä¸ºåœ†ä¸Šåªæœ‰ä¸¤ä¸ªç‚¹aå’Œcï¼Œç„¶åè¿ä¸€æ¡è¾¹ã€‚ä½†è¿™æ¡è¾¹å®é™…ä¸Šç©¿è¿‡äº†ç‚¹bï¼Œå› æ­¤éæ³•ï¼
 
-  ÕıÈ·µÄ×ö·¨ÊÇÔÚpointsÊı×éÖĞ±£ÁôÕâĞ©µã£¬Ö»ÊÇ²»ÒªÌí¼ÓÓëËüÃÇÁÚ½ÓµÄ±ß
+  æ­£ç¡®çš„åšæ³•æ˜¯åœ¨pointsæ•°ç»„ä¸­ä¿ç•™è¿™äº›ç‚¹ï¼Œåªæ˜¯ä¸è¦æ·»åŠ ä¸å®ƒä»¬é‚»æ¥çš„è¾¹
 */
 double solve() {
   idx.clear();
@@ -303,7 +303,7 @@ double solve() {
   dijkstra.init(points.size());
   for(int i = 0; i < e.size(); i++) {
     int a = e[i].from, b = e[i].to;
-    if(isForbidden(points[a]) || isForbidden(points[b])) continue; // µãa»òµãb²»ÄÜÁ¬±ß
+    if(isForbidden(points[a]) || isForbidden(points[b])) continue; // ç‚¹aæˆ–ç‚¹bä¸èƒ½è¿è¾¹
     double d = e[i].dist;
     dijkstra.AddEdge(a, b, d);
     dijkstra.AddEdge(b, a, d);

@@ -36,30 +36,30 @@ double Dot(const Vector3& A, const Vector3& B) { return A.x*B.x + A.y*B.y + A.z*
 double Length(const Vector3& A) { return sqrt(Dot(A, A)); }
 Vector3 Cross(const Vector3& A, const Vector3& B) { return Vector3(A.y*B.z - A.z*B.y, A.z*B.x - A.x*B.z, A.x*B.y - A.y*B.x); }
 
-// Æ½Ãæ
+// å¹³é¢
 struct Plane {
   double a, b, c, d;
   Plane() {}
-  Plane(Point3* P) { // ÓÃÈıµãÈ·¶¨Ò»¸öÆ½Ãæ¡£µ÷ÓÃÕßĞè±£Ö¤Èıµã²»¹²Ïß
+  Plane(Point3* P) { // ç”¨ä¸‰ç‚¹ç¡®å®šä¸€ä¸ªå¹³é¢ã€‚è°ƒç”¨è€…éœ€ä¿è¯ä¸‰ç‚¹ä¸å…±çº¿
     Vector3 V = Cross(P[1]-P[0], P[2]-P[0]);
     V = V / Length(V);
     a = V.x; b = V.y; c = V.z; d = -Dot(V, P[0]);
   }
-  Point3 sample() const { // Ëæ»ú²ÉÑù
+  Point3 sample() const { // éšæœºé‡‡æ ·
     double v1 = rand() / (double)RAND_MAX;
     double v2 = rand() / (double)RAND_MAX;
     if(a != 0) return Point3(-(d+v1*b+v2*c)/a, v1, v2);
     if(b != 0) return Point3(v1, -(d+v1*a+v2*c)/b, v2);
     if(c != 0) return Point3(v1, v2, -(d+v1*a+v2*b)/c);
-    assert(0); // ²»ÊÇÒ»¸öÆ½Ãæ
+    assert(0); // ä¸æ˜¯ä¸€ä¸ªå¹³é¢
   }
 };
 
-// 4x4Æë´Î±ä»»¾ØÕó
+// 4x4é½æ¬¡å˜æ¢çŸ©é˜µ
 struct Matrix4x4 {
   double v[4][4];
 
-  // ¾ØÕó³Ë·¨
+  // çŸ©é˜µä¹˜æ³•
   inline Matrix4x4 operator * (const Matrix4x4 &rhs) const {
     Matrix4x4 ans;   
     for (int i = 0; i < 4; i++)
@@ -71,34 +71,34 @@ struct Matrix4x4 {
     return ans;
   }
 
-  // ±ä»»Ò»¸öµã£¬Ïàµ±ÓÚÓÒ³ËÁĞÏòÁ¿(x, y, z, 1}
+  // å˜æ¢ä¸€ä¸ªç‚¹ï¼Œç›¸å½“äºå³ä¹˜åˆ—å‘é‡(x, y, z, 1}
   inline Point3 transform(Point3 P) const {
     double p[4] = {P.x, P.y, P.z, 1}, ans[4] = {0};
     for(int i = 0; i < 4; i++)
       for(int k = 0; k < 4; k++)
         ans[i] += v[i][k] * p[k];
-    return Point3(ans[0], ans[1], ans[2]); // ans[3]¿Ï¶¨ÊÇ1
+    return Point3(ans[0], ans[1], ans[2]); // ans[3]è‚¯å®šæ˜¯1
   }
 
-  // µ¥Î»¾ØÕó
+  // å•ä½çŸ©é˜µ
   void loadIdentity() {
     memset(v, 0, sizeof(v));
     v[0][0] = v[1][1] = v[2][2] = v[3][3] = 1;
   }
 
-  // Æ½ÒÆ¾ØÕó
+  // å¹³ç§»çŸ©é˜µ
   void loadTranslate(double a, double b, double c) {
     loadIdentity();
     v[0][3] = a; v[1][3] = b; v[2][3] = c;
   }
 
-  // Ëõ·Å¾ØÕó
+  // ç¼©æ”¾çŸ©é˜µ
   void loadScale(double a, double b, double c) {
     loadIdentity();
     v[0][0] = a; v[1][1] = b; v[2][2] = c;
   }
 
-  // ÈÆ¹Ì¶¨ÖáĞı×ªÒ»¶¨½Ç¶ÈµÄ¾ØÕó
+  // ç»•å›ºå®šè½´æ—‹è½¬ä¸€å®šè§’åº¦çš„çŸ©é˜µ
   void loadRotation(double a, double b, double c, double deg) {
     loadIdentity();
     double rad = deg / 180 * PI;
@@ -130,8 +130,8 @@ int main() {
   for(int i = 0; i < m; i++)
     scanf("%lf%lf%lf%lf", &planes[i].a, &planes[i].b, &planes[i].c, &planes[i].d);
 
-  // µãP½«±»±ä»»Îª M[T-1] * ... * M[2] * M[1] * M[0] * P
-  // ¸ù¾İ½áºÏÂÉ£¬ÏÈ¼ÆËãmat = (M[T-1] * ... * M[0])£¬ÔòµãP±ä»»Îªmat * P
+  // ç‚¹På°†è¢«å˜æ¢ä¸º M[T-1] * ... * M[2] * M[1] * M[0] * P
+  // æ ¹æ®ç»“åˆå¾‹ï¼Œå…ˆè®¡ç®—mat = (M[T-1] * ... * M[0])ï¼Œåˆ™ç‚¹På˜æ¢ä¸ºmat * P
   Matrix4x4 mat;
   mat.loadIdentity();
   for(int i = 0; i < T; i++) {
@@ -145,12 +145,12 @@ int main() {
     mat = M * mat;
   }
 
-  // ±ä»»µã
+  // å˜æ¢ç‚¹
   for(int i = 0; i < n; i++) {
     Point3 ans = mat.transform(P[i]);
     printf("%.2lf %.2lf %.2lf\n", ans.x, ans.y, ans.z);
   }
-  // ±ä»»Æ½Ãæ
+  // å˜æ¢å¹³é¢
   for(int i = 0; i < m; i++) {
     Point3 A[3];
     for(int j = 0; j < 3; j++) A[j] = mat.transform(planes[i].sample());

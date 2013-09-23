@@ -70,14 +70,14 @@ int main() {
           x[c++] = GetLineIntersection(P1, P2-P1, P3, P4-P3).x;
       }
 
-    // 根据所有交点离散化
+    // 鏍规嵁鎵�鏈変氦鐐圭鏁ｅ寲
     sort(x, x+c);
     c = unique(x, x+c) - x;
 
     double ans = 0;
     Point lastp;
     for(int k = 0; k < c; k++) {
-      // 计算直线x=x[k]和山相交的最高点
+      // 璁＄畻鐩寸嚎x=x[k]鍜屽北鐩镐氦鐨勬渶楂樼偣
       Point P(x[k], 0);
       Vector V(0, 1);
       double maxy = -1;

@@ -32,8 +32,8 @@ Vector operator - (Point A, Point B) { return Vector(A.x-B.x, A.y-B.y); }
 Vector operator * (Vector A, double p) { return Vector(A.x*p, A.y*p); }
 Vector operator / (Vector A, double p) { return Vector(A.x/p, A.y/p); }
 
-// ÀíÂÛÉÏÕâ¸ö¡°Ğ¡ÓÚ¡±ÔËËã·ûÊÇ´íµÄ£¬ÒòÎª¿ÉÄÜÓĞÈı¸öµãa, b, c, aºÍbºÜ½Ó½ü£¨¼´a<bºÃb<a¶¼²»³ÉÁ¢£©£¬bºÍcºÜ½Ó½ü£¬µ«aºÍc²»½Ó½ü
-// ËùÒÔÊ¹ÓÃÕâÖÖ¡°Ğ¡ÓÚ¡±ÔËËã·ûµÄÇ°ÌáÊÇÄÜÅÅ³ıÉÏÊöÇé¿ö
+// ç†è®ºä¸Šè¿™ä¸ªâ€œå°äºâ€è¿ç®—ç¬¦æ˜¯é”™çš„ï¼Œå› ä¸ºå¯èƒ½æœ‰ä¸‰ä¸ªç‚¹a, b, c, aå’Œbå¾ˆæ¥è¿‘ï¼ˆå³a<bå¥½b<aéƒ½ä¸æˆç«‹ï¼‰ï¼Œbå’Œcå¾ˆæ¥è¿‘ï¼Œä½†aå’Œcä¸æ¥è¿‘
+// æ‰€ä»¥ä½¿ç”¨è¿™ç§â€œå°äºâ€è¿ç®—ç¬¦çš„å‰ææ˜¯èƒ½æ’é™¤ä¸Šè¿°æƒ…å†µ
 bool operator < (const Point& a, const Point& b) {
   return dcmp(a.x - b.x) < 0 || (dcmp(a.x - b.x) == 0 && dcmp(a.y - b.y) < 0);
 }
@@ -54,10 +54,10 @@ bool OnSegment(const Point& p, const Point& a1, const Point& a2) {
   return dcmp(Cross(a1-p, a2-p)) == 0 && dcmp(Dot(a1-p, a2-p)) < 0;
 }
 
-// ½»µãÏà¶ÔÓÚÔ²1µÄ¼«½Ç±£´æÔÚradÖĞ
+// äº¤ç‚¹ç›¸å¯¹äºåœ†1çš„æè§’ä¿å­˜åœ¨radä¸­
 void getCircleCircleIntersection(Point c1, double r1, Point c2, double r2, vector<double>& rad) {
   double d = Length(c1 - c2);
-  if(dcmp(d) == 0) return; // ²»¹ÜÊÇÄÚº¬»¹ÊÇÖØºÏ£¬¶¼²»Ïà½»
+  if(dcmp(d) == 0) return; // ä¸ç®¡æ˜¯å†…å«è¿˜æ˜¯é‡åˆï¼Œéƒ½ä¸ç›¸äº¤
   if(dcmp(r1 + r2 - d) < 0) return;
   if(dcmp(fabs(r1-r2) - d) > 0) return;
 
@@ -72,31 +72,31 @@ Point GetLineProjection(Point P, Point A, Point B) {
   return A+v*(Dot(v, P-A) / Dot(v, v));
 }
 
-// Ö±ÏßABºÍÔ²ĞÄÎªC£¬°ë¾¶ÎªrµÄÔ²µÄ½»µã¡£Ïà¶ÔÓÚÔ²µÄ¼«½Ç±£´æÔÚradÖĞ
+// ç›´çº¿ABå’Œåœ†å¿ƒä¸ºCï¼ŒåŠå¾„ä¸ºrçš„åœ†çš„äº¤ç‚¹ã€‚ç›¸å¯¹äºåœ†çš„æè§’ä¿å­˜åœ¨radä¸­
 void getLineCircleIntersection(Point A, Point B, Point C, double r, vector<double>& rad){
   Point p = GetLineProjection(C, A, B);
   double a = angle(p - C);
   double d = Length(p - C);
   if(dcmp(d - r) > 0) return;
-  if(dcmp(d) == 0) { // ¹ıÔ²ĞÄ
+  if(dcmp(d) == 0) { // è¿‡åœ†å¿ƒ
     rad.push_back(NormalizeAngle(angle(A - B)));
     rad.push_back(NormalizeAngle(angle(B - A)));
   }
   double da = acos(d / r);
 }
 
-/////////// ÌâÄ¿Ïà¹Ø
+/////////// é¢˜ç›®ç›¸å…³
 const int maxn = 200 + 5;
-int n, N, M; // nÊÇÔ²µÄ×ÜÊı£¬NºÍMÊÇ³¡µØ³¤¿í
+int n, N, M; // næ˜¯åœ†çš„æ€»æ•°ï¼ŒNå’ŒMæ˜¯åœºåœ°é•¿å®½
 Point P[maxn];
 double R[maxn];
 
-// È¡Ô²no»¡¶ÈÎªradµÄµã
+// å–åœ†noå¼§åº¦ä¸ºradçš„ç‚¹
 Point getPoint(int no, double rad) {
   return Point(P[no].x + cos(rad)*R[no], P[no].y + sin(rad)*R[no]);
 }
 
-// µÚno¸öÔ²»¡¶ÈÎªradµÄµãÊÇ·ñ¿É¼û¡£ÏàÍ¬µÄÔ²Ö»ÓĞ±àºÅ×îĞ¡µÄ¿É¼û£¨ËäÈ»¶ÔÓÚ±¾ÌâÀ´Ëµ²»±ØÒª£©
+// ç¬¬noä¸ªåœ†å¼§åº¦ä¸ºradçš„ç‚¹æ˜¯å¦å¯è§ã€‚ç›¸åŒçš„åœ†åªæœ‰ç¼–å·æœ€å°çš„å¯è§ï¼ˆè™½ç„¶å¯¹äºæœ¬é¢˜æ¥è¯´ä¸å¿…è¦ï¼‰
 bool visible(int no, double rad) {
   Point p = getPoint(no, rad);
   if(p.x < 0 || p.y < 0 || p.x > N || p.y > M) return false;
@@ -107,7 +107,7 @@ bool visible(int no, double rad) {
   return true;
 }
 
-// ³¡µØ±ß½çÉÏµÄµãpÊÇ·ñ¿É¼û
+// åœºåœ°è¾¹ç•Œä¸Šçš„ç‚¹pæ˜¯å¦å¯è§
 bool visible(Point p) {
   for(int i = 0; i < n; i++) {
     if(dcmp(Length(p - P[i]) - R[i]) <= 0) return false;
@@ -115,12 +115,12 @@ bool visible(Point p) {
   return true;
 }
 
-// ÇóÔ²µÄ²¢ÔÚ(0,0)-(N,M)ÄÚµÄÃæ»ı
-// Ê¹ÓÃÒ»°ãÇú±ßÍ¼ĞÎµÄÃæ»ıËã·¨¡£ÏÂÎÄÖĞ£¬¡°ËùÇóÍ¼ĞÎ¡±Ö¸µÄÊÇ²»ÄÜÖÖ²ËµÄÇøÓò£¬ËüµÄ±ß½çÓÉÔ²»¡ºÍÖ±Ïß¶Î¹¹³É¡£
-// Ëã·¨£º¶ÔÓÚËùÇóÍ¼ĞÎ±ß½çÉÏµÄÃ¿Ò»¶Î£¨¿ÉÒÔÊÇÇúÏß£©a~>b£¬ÀÛ¼ÓCross(a, b)ºÍËüÔÚÖ±Ïß¶Îa->bÓÒ±ß²¿·ÖµÄÃæ»ı£¨×ó±ß²¿·ÖËã¸º£©
-// ±ß½ç¼ÆËã£º
-// 1. Ã¿¸öÔ²±»ÆäËûÔ²ºÍ³¡µØ±ß½ç·Ö³ÉÁËÈô¸ÉÌõÔ²»¡£¬ÖĞµã²»±»ÆäËûÔ²¸²¸ÇÇÒÔÚ³¡µØÄÚµÄÔ²»¡ÔÚËùÇóÍ¼ĞÎ±ß½çÉÏ
-// 2. ³¡µØµÄËÄÌõ±ß½ç±»Ô²·Ö³ÉÁËÈô¸ÉÌõÏß¶Î¡£ÖĞµãÔÚÄ³¸öÔ²ÄÚ²¿µÄÏß¶ÎÔÚËùÇóÍ¼ĞÎ±ß½çÉÏ
+// æ±‚åœ†çš„å¹¶åœ¨(0,0)-(N,M)å†…çš„é¢ç§¯
+// ä½¿ç”¨ä¸€èˆ¬æ›²è¾¹å›¾å½¢çš„é¢ç§¯ç®—æ³•ã€‚ä¸‹æ–‡ä¸­ï¼Œâ€œæ‰€æ±‚å›¾å½¢â€æŒ‡çš„æ˜¯ä¸èƒ½ç§èœçš„åŒºåŸŸï¼Œå®ƒçš„è¾¹ç•Œç”±åœ†å¼§å’Œç›´çº¿æ®µæ„æˆã€‚
+// ç®—æ³•ï¼šå¯¹äºæ‰€æ±‚å›¾å½¢è¾¹ç•Œä¸Šçš„æ¯ä¸€æ®µï¼ˆå¯ä»¥æ˜¯æ›²çº¿ï¼‰a~>bï¼Œç´¯åŠ Cross(a, b)å’Œå®ƒåœ¨ç›´çº¿æ®µa->bå³è¾¹éƒ¨åˆ†çš„é¢ç§¯ï¼ˆå·¦è¾¹éƒ¨åˆ†ç®—è´Ÿï¼‰
+// è¾¹ç•Œè®¡ç®—ï¼š
+// 1. æ¯ä¸ªåœ†è¢«å…¶ä»–åœ†å’Œåœºåœ°è¾¹ç•Œåˆ†æˆäº†è‹¥å¹²æ¡åœ†å¼§ï¼Œä¸­ç‚¹ä¸è¢«å…¶ä»–åœ†è¦†ç›–ä¸”åœ¨åœºåœ°å†…çš„åœ†å¼§åœ¨æ‰€æ±‚å›¾å½¢è¾¹ç•Œä¸Š
+// 2. åœºåœ°çš„å››æ¡è¾¹ç•Œè¢«åœ†åˆ†æˆäº†è‹¥å¹²æ¡çº¿æ®µã€‚ä¸­ç‚¹åœ¨æŸä¸ªåœ†å†…éƒ¨çš„çº¿æ®µåœ¨æ‰€æ±‚å›¾å½¢è¾¹ç•Œä¸Š
 double getArea() {
   Point b[4];
   b[0] = Point(0, 0);
@@ -129,24 +129,24 @@ double getArea() {
   b[3] = Point(0, M);
   double area = 0;
 
-  // Ô²»¡²¿·Ö
+  // åœ†å¼§éƒ¨åˆ†
   for(int i = 0; i < n; i++) {
     vector<double> rad;
     rad.push_back(0);
     rad.push_back(PI*2);
 
-    // Ô²ºÍ±ß½çµÄ½»µã
+    // åœ†å’Œè¾¹ç•Œçš„äº¤ç‚¹
     for(int j = 0; j < 4; j++)
       getLineCircleIntersection(b[j], b[(j+1)%4], P[i], R[i], rad);
 
-    // Ô²ºÍÔ²µÄ½»µã
+    // åœ†å’Œåœ†çš„äº¤ç‚¹
     for(int j = 0; j < n; j++)
       getCircleCircleIntersection(P[i], R[i], P[j], R[j], rad);
     
     sort(rad.begin(), rad.end());
     for(int j = 0; j < rad.size()-1; j++) if(rad[j+1] - rad[j] > eps) {
-      double mid = (rad[j] + rad[j+1]) / 2.0; // Ô²»¡ÖĞµãÏà¶ÔÓÚÔ²iÔ²ĞÄµÄ¼«½Ç
-      if(visible(i, mid)) { // »¡ÖĞµã¿É¼û£¬Òò´Ë»¡ÔÚÍ¼ĞÎ±ß½çÉÏ
+      double mid = (rad[j] + rad[j+1]) / 2.0; // åœ†å¼§ä¸­ç‚¹ç›¸å¯¹äºåœ†iåœ†å¿ƒçš„æè§’
+      if(visible(i, mid)) { // å¼§ä¸­ç‚¹å¯è§ï¼Œå› æ­¤å¼§åœ¨å›¾å½¢è¾¹ç•Œä¸Š
         area += Cross(getPoint(i, rad[j]), getPoint(i, rad[j+1])) / 2.0;
         double a = rad[j+1] - rad[j];
         area += R[i] * R[i] * (a - sin(a)) / 2.0;
@@ -154,7 +154,7 @@ double getArea() {
     }
   }
 
-  // Ö±Ïß¶Î²¿·Ö
+  // ç›´çº¿æ®µéƒ¨åˆ†
   for(int i = 0; i < 4; i++) {
     Vector v = b[(i+1)%4] - b[i];
     double len = Length(v);
@@ -171,14 +171,14 @@ double getArea() {
       }
     }
 
-    sort(dist.begin(), dist.end()); // ±ØĞë°´ÕÕµ½ÆğµãµÄ¾àÀëÅÅĞò¶ø²»ÊÇ°´ÕÕµãµÄ×ÖµäĞòÅÅĞò£¬·ñÔòÏòÁ¿·½Ïò¿ÉÄÜ»á·´
+    sort(dist.begin(), dist.end()); // å¿…é¡»æŒ‰ç…§åˆ°èµ·ç‚¹çš„è·ç¦»æ’åºè€Œä¸æ˜¯æŒ‰ç…§ç‚¹çš„å­—å…¸åºæ’åºï¼Œå¦åˆ™å‘é‡æ–¹å‘å¯èƒ½ä¼šå
     vector<Point> points;
     for(int j = 0; j < dist.size(); j++)
       points.push_back(b[i] + v * (dist[j] / len));
 
     for(int j = 0; j < dist.size()-1; j++) {
       Point midp = (points[j] + points[j+1]) / 2.0;
-      if(!visible(midp)) area += Cross(points[j], points[j+1]) / 2.0; // Ïß¶ÎÖĞµã²»¿É¼û£¬Òò´ËÏß¶ÎÔÚÍ¼ĞÎ±ß½çÉÏ
+      if(!visible(midp)) area += Cross(points[j], points[j+1]) / 2.0; // çº¿æ®µä¸­ç‚¹ä¸å¯è§ï¼Œå› æ­¤çº¿æ®µåœ¨å›¾å½¢è¾¹ç•Œä¸Š
     }
   }
 

@@ -12,7 +12,7 @@ using namespace std;
 
 typedef long long LL;
 
-//// ÈÕÆÚÊ±¼ä²¿·Ö
+//// æ—¥æœŸæ—¶é—´éƒ¨åˆ†
 
 const int SECONDS_PER_DAY = 24 * 60 * 60;
 
@@ -66,20 +66,20 @@ void print_time(LL t) {
   }
 }
 
-//// ÊıÂÛ²¿·Ö
+//// æ•°è®ºéƒ¨åˆ†
 
 LL gcd(LL a, LL b) {
   return b ? gcd(b, a%b) : a;
 }
 
-// Çód = gcd(a, b)£¬ÒÔ¼°Âú×ãax+by=dµÄ(x,y)£¨×¢Òâ£¬xºÍy¿ÉÄÜÎª¸ºÊı£©
-// À©Õ¹euclidËã·¨¡£
+// æ±‚d = gcd(a, b)ï¼Œä»¥åŠæ»¡è¶³ax+by=dçš„(x,y)ï¼ˆæ³¨æ„ï¼Œxå’Œyå¯èƒ½ä¸ºè´Ÿæ•°ï¼‰
+// æ‰©å±•euclidç®—æ³•ã€‚
 void gcd(LL a, LL b, LL& d, LL& x, LL& y) {
   if(!b){ d = a; x = 1; y = 0; }
   else{ gcd(b, a%b, d, y, x); y -= x*(a/b); }
 }
 
-// ×¢Òâ£¬·µ»ØÖµ¿ÉÄÜÊÇ¸ºµÄ
+// æ³¨æ„ï¼Œè¿”å›å€¼å¯èƒ½æ˜¯è´Ÿçš„
 int pow_mod(LL a, LL p, int MOD) {
   if(p == 0) return 1;
   LL ans = pow_mod(a, p/2, MOD);
@@ -88,22 +88,22 @@ int pow_mod(LL a, LL p, int MOD) {
   return ans;
 }
 
-// ×¢Òâ£¬·µ»ØÖµ¿ÉÄÜÊÇ¸ºµÄ
+// æ³¨æ„ï¼Œè¿”å›å€¼å¯èƒ½æ˜¯è´Ÿçš„
 int mul_mod(LL a, LL b, int MOD) {
   return a * b % MOD;
 }
 
-// Çóax = 1 (mod MOD) µÄ½â£¬ÆäÖĞaºÍMOD»¥ËØ¡£
-// ×¢Òâ£¬ÓÉÓÚMOD²»Ò»¶¨ÎªËØÊı£¬Òò´Ë²»ÄÜÖ±½ÓÓÃpow_mod(a, MOD-2, MOD)Çó½â
-// ½â·¨£ºÏÈÇóax + MODy = 1µÄ½â(x,y)£¬ÔòxÎªËùÇó
+// æ±‚ax = 1 (mod MOD) çš„è§£ï¼Œå…¶ä¸­aå’ŒMODäº’ç´ ã€‚
+// æ³¨æ„ï¼Œç”±äºMODä¸ä¸€å®šä¸ºç´ æ•°ï¼Œå› æ­¤ä¸èƒ½ç›´æ¥ç”¨pow_mod(a, MOD-2, MOD)æ±‚è§£
+// è§£æ³•ï¼šå…ˆæ±‚ax + MODy = 1çš„è§£(x,y)ï¼Œåˆ™xä¸ºæ‰€æ±‚
 int inv(LL a, int MOD) {
   LL d, x, y;
   gcd(a, MOD, d, x, y);
-  return (x + MOD) % MOD; // ÕâÀïµÄx¿ÉÄÜÊÇ¸ºÊı£¬Òò´ËÒªµ÷Õû
+  return (x + MOD) % MOD; // è¿™é‡Œçš„xå¯èƒ½æ˜¯è´Ÿæ•°ï¼Œå› æ­¤è¦è°ƒæ•´
 }
 
-// ½âÄ£·½³Ì£¨¼´ÀëÉ¢¶ÔÊı£©a^x = b¡£ÒªÇóMODÎªËØÊı
-// ½â·¨£ºShankµÄ´ó²½Ğ¡²½Ëã·¨
+// è§£æ¨¡æ–¹ç¨‹ï¼ˆå³ç¦»æ•£å¯¹æ•°ï¼‰a^x = bã€‚è¦æ±‚MODä¸ºç´ æ•°
+// è§£æ³•ï¼šShankçš„å¤§æ­¥å°æ­¥ç®—æ³•
 int log_mod(int a, int b, int MOD) {
   int m, v, e = 1, i;
   m = (int)sqrt(MOD);
@@ -118,10 +118,10 @@ int log_mod(int a, int b, int MOD) {
   return -1;
 }
 
-// ·µ»ØMOD£¨²»Ò»¶¨ÊÇËØÊı£©µÄÄ³Ò»¸öÔ­¸ù£¬phiÎªMODµÄÅ·À­º¯ÊıÖµ£¨ÈôMODÎªËØÊıÔòphi=MOD-1£©
-// ½â·¨£º¿¼ÂÇphi(MOD)µÄËùÓĞËØÒò×Óp£¬Èç¹ûËùÓĞm^(phi/p) mod MOD¶¼²»µÈÓÚ1£¬ÔòmÊÇMODµÄÔ­¸ù
+// è¿”å›MODï¼ˆä¸ä¸€å®šæ˜¯ç´ æ•°ï¼‰çš„æŸä¸€ä¸ªåŸæ ¹ï¼Œphiä¸ºMODçš„æ¬§æ‹‰å‡½æ•°å€¼ï¼ˆè‹¥MODä¸ºç´ æ•°åˆ™phi=MOD-1ï¼‰
+// è§£æ³•ï¼šè€ƒè™‘phi(MOD)çš„æ‰€æœ‰ç´ å› å­pï¼Œå¦‚æœæ‰€æœ‰m^(phi/p) mod MODéƒ½ä¸ç­‰äº1ï¼Œåˆ™mæ˜¯MODçš„åŸæ ¹
 int get_primitive_root(int MOD, int phi) {
-  // ¼ÆËãphiµÄËùÓĞËØÒò×Ó
+  // è®¡ç®—phiçš„æ‰€æœ‰ç´ å› å­
   vector<int> factors;
   int n = phi;
   for(int i = 2; i*i <= n; i++) {
@@ -140,8 +140,8 @@ int get_primitive_root(int MOD, int phi) {
   }
 }
 
-// ½âÏßĞÔÄ£·½³Ì ax = b (mod n)£¬·µ»ØËùÓĞ½â£¨Ä£nÊ£ÓàÏµ£©
-// ½â·¨£ºÁîd = gcd(a, n)£¬Á½±ßÍ¬Ê±³ıÒÔdºóµÃa'x = b' (mod n')£¬ÓÉÓÚ´ËÊ±gcd(a',n')=1£¬Á½±ßÍ¬Ê±×ó³Ëa'ÔÚÄ£n'ÖĞµÄÄæ¼´¿É£¬×îºó°ÑÄ£n'Ê£ÓàÏµÖĞµÄ½â×ª»¯ÎªÄ£nÊ£ÓàÏµ
+// è§£çº¿æ€§æ¨¡æ–¹ç¨‹ ax = b (mod n)ï¼Œè¿”å›æ‰€æœ‰è§£ï¼ˆæ¨¡nå‰©ä½™ç³»ï¼‰
+// è§£æ³•ï¼šä»¤d = gcd(a, n)ï¼Œä¸¤è¾¹åŒæ—¶é™¤ä»¥dåå¾—a'x = b' (mod n')ï¼Œç”±äºæ­¤æ—¶gcd(a',n')=1ï¼Œä¸¤è¾¹åŒæ—¶å·¦ä¹˜a'åœ¨æ¨¡n'ä¸­çš„é€†å³å¯ï¼Œæœ€åæŠŠæ¨¡n'å‰©ä½™ç³»ä¸­çš„è§£è½¬åŒ–ä¸ºæ¨¡nå‰©ä½™ç³»
 vector<LL> solve_linear_modular_equation(int a, int b, int n) {
   vector<LL> ans;
   int d = gcd(a, n);
@@ -154,15 +154,15 @@ vector<LL> solve_linear_modular_equation(int a, int b, int n) {
   return ans;
 }
 
-// ½â¸ß´ÎÄ£·½³Ì x^q = a (mod p)£¬·µ»ØËùÓĞ½â£¨Ä£nÊ£ÓàÏµ£©
-// ½â·¨£ºÉèmÎªpµÄÒ»¸öÔ­¸ù£¬ÇÒx = m^y, a = m^z£¬Ôòm^qy = m^z(mod p)£¬Òò´Ëqy = z(mod p-1)£¬½âÏßĞÔÄ£·½³Ì¼´¿É
+// è§£é«˜æ¬¡æ¨¡æ–¹ç¨‹ x^q = a (mod p)ï¼Œè¿”å›æ‰€æœ‰è§£ï¼ˆæ¨¡nå‰©ä½™ç³»ï¼‰
+// è§£æ³•ï¼šè®¾mä¸ºpçš„ä¸€ä¸ªåŸæ ¹ï¼Œä¸”x = m^y, a = m^zï¼Œåˆ™m^qy = m^z(mod p)ï¼Œå› æ­¤qy = z(mod p-1)ï¼Œè§£çº¿æ€§æ¨¡æ–¹ç¨‹å³å¯
 vector<LL> mod_root(int a, int q, int p) {
   vector<LL> ans;
   if(a == 0) {
     ans.push_back(0);
     return ans;
   }
-  int m = get_primitive_root(p, p-1); // pÊÇËØÊı£¬Òò´Ëphi(p)=p-1
+  int m = get_primitive_root(p, p-1); // pæ˜¯ç´ æ•°ï¼Œå› æ­¤phi(p)=p-1
   int z = log_mod(m, a, p);
   ans = solve_linear_modular_equation(q, z, p-1);
   for(int i = 0; i < ans.size(); i++)

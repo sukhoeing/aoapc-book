@@ -1,6 +1,6 @@
 // LA3809/UVa1065 Raising the Roof
 // Rujia Liu
-// Ñ°ÕÒtopÊ±¸ÄÓÃ¼òµ¥Ñ­»·Ñ°ÕÒ£¬Ğ§ÂÊÉÔµÍµ«´úÂë¼òµ¥
+// å¯»æ‰¾topæ—¶æ”¹ç”¨ç®€å•å¾ªç¯å¯»æ‰¾ï¼Œæ•ˆç‡ç¨ä½ä½†ä»£ç ç®€å•
 #include<cstdio>
 #include<cmath>
 #define REP(i,n) for(int i = 0; i < (n); ++i)
@@ -37,11 +37,11 @@ const int maxt = 1000 + 10;
 Point3 p[maxn];
 int n, m;
 int t[maxt][3];
-Vector3 normal[maxt];    // Èı½ÇĞÎiµÄ·¨ÏòÁ¿
-double d[maxt];          // Èı½ÇĞÎiµÄµã·¨Ê½ÎªDot(normal[i], p) = d
-double area_ratio[maxt]; // Èı½ÇĞÎiµÄÍ¶Ó°Ãæ»ı³ËÒÔarea_ratio[i]¾ÍÊÇÊµ¼ÊÃæ»ı
+Vector3 normal[maxt];    // ä¸‰è§’å½¢içš„æ³•å‘é‡
+double d[maxt];          // ä¸‰è§’å½¢içš„ç‚¹æ³•å¼ä¸ºDot(normal[i], p) = d
+double area_ratio[maxt]; // ä¸‰è§’å½¢içš„æŠ•å½±é¢ç§¯ä¹˜ä»¥area_ratio[i]å°±æ˜¯å®é™…é¢ç§¯
 
-// ÊäÈëÖĞÓĞÔÚÊúÖ±Æ½ÃæÄÚ£¨¼´normal[i].z=0£©µÄÈı½ÇĞÎ£¬µ«Ö÷Ëã·¨»á×Ô¶¯ºöÂÔËüÃÇ£¬²»ÓÃµ£ĞÄarea_ratio[i]²»´æÔÚ
+// è¾“å…¥ä¸­æœ‰åœ¨ç«–ç›´å¹³é¢å†…ï¼ˆå³normal[i].z=0ï¼‰çš„ä¸‰è§’å½¢ï¼Œä½†ä¸»ç®—æ³•ä¼šè‡ªåŠ¨å¿½ç•¥å®ƒä»¬ï¼Œä¸ç”¨æ‹…å¿ƒarea_ratio[i]ä¸å­˜åœ¨
 void init() {
   for(int i = 0; i < m; i++) {
     Point3 p0 = p[t[i][0]], p1 = p[t[i][1]], p2 = p[t[i][2]];
@@ -57,8 +57,8 @@ inline double getTriangleZ(int idx, double x, double y) {
 }
 
 struct Event {
-  int id;   // Éæ¼°µ½µÄÈı½ÇĞÎ±àºÅ
-  double y; // ÓëÉ¨ÃèÏß½»µãµÄy×ø±ê
+  int id;   // æ¶‰åŠåˆ°çš„ä¸‰è§’å½¢ç¼–å·
+  double y; // ä¸æ‰«æçº¿äº¤ç‚¹çš„yåæ ‡
   Event(int id, double y):id(id),y(y) {}
   bool operator < (const Event& rhs) const {
     return y < rhs.y;
@@ -66,11 +66,11 @@ struct Event {
 };
 
 double solve() {
-  // ÀëÉ¢»¯
+  // ç¦»æ•£åŒ–
   vector<double> sx;
   for(int i = 1; i <= n; i++) sx.push_back(p[i].x);
   REP(i,m) REP(j,m) REP(a,3) REP(b,3) {
-    // Çópa-pbºÍqa-qbÍ¶Ó°µ½XYÆ½ÃæºóµÄ½»µã¡£Ö±½Ó½â²ÎÊı·½³Ì
+    // æ±‚pa-pbå’Œqa-qbæŠ•å½±åˆ°XYå¹³é¢åçš„äº¤ç‚¹ã€‚ç›´æ¥è§£å‚æ•°æ–¹ç¨‹
     Point3 pa = p[t[i][a]];
     Point3 pb = p[t[i][(a+1)%3]];
     Point3 qa = p[t[j][b]];
@@ -91,43 +91,43 @@ double solve() {
 
   double ans = 0;
   for(int i = 0; i < sx.size()-1; i++) {
-    // É¨ÃèÏßÎ»ÓÚx = xx
+    // æ‰«æçº¿ä½äºx = xx
     double xx = (sx[i] + sx[i+1]) / 2;
 
-    // ¼ÆËãÉ¨ÃèÏß´©¹ıµÄÈı½ÇĞÎ¼¯ºÏ£¬ÎªÃ¿¸öÈı½ÇĞÎ´´½¨¡°½øÈë¡±ºÍ¡°Àë¿ª¡±ÊÂ¼ş
+    // è®¡ç®—æ‰«æçº¿ç©¿è¿‡çš„ä¸‰è§’å½¢é›†åˆï¼Œä¸ºæ¯ä¸ªä¸‰è§’å½¢åˆ›å»ºâ€œè¿›å…¥â€å’Œâ€œç¦»å¼€â€äº‹ä»¶
     vector<Event> events;
-    REP(j,m) if(normal[j].z != 0) REP(a,3) { // ºöÂÔÊúÖ±Æ½ÃæÄÚµÄÈı½ÇĞÎ
+    REP(j,m) if(normal[j].z != 0) REP(a,3) { // å¿½ç•¥ç«–ç›´å¹³é¢å†…çš„ä¸‰è§’å½¢
       Point3 pa = p[t[j][a]];
       Point3 pb = p[t[j][(a+1)%3]];
-      // ¼ÆËãÉ¨ÃèÏßx = xxºÍpa-pbÔÚÆ½ÃæXYÉÏÍ¶Ó°µÄ½»µã
-      if(pa.x == pb.x) continue; // ÊúÖ±Ïß¶Î
-      if(!(min(pa.x, pb.x) <= sx[i] && max(pa.x, pb.x) >= sx[i+1])) continue; // ²»ÔÚÊúÖ±ÌõÄÚ
-      double y = pa.y + (pb.y - pa.y) * (xx - pa.x) / (pb.x - pa.x); // ½â·½³ÌµÃµ½
+      // è®¡ç®—æ‰«æçº¿x = xxå’Œpa-pbåœ¨å¹³é¢XYä¸ŠæŠ•å½±çš„äº¤ç‚¹
+      if(pa.x == pb.x) continue; // ç«–ç›´çº¿æ®µ
+      if(!(min(pa.x, pb.x) <= sx[i] && max(pa.x, pb.x) >= sx[i+1])) continue; // ä¸åœ¨ç«–ç›´æ¡å†…
+      double y = pa.y + (pb.y - pa.y) * (xx - pa.x) / (pb.x - pa.x); // è§£æ–¹ç¨‹å¾—åˆ°
       events.push_back(Event(j, y));
     }
     if(events.empty()) continue;
 
-    // °´ÕÕyµİÔöµÄË³Ğò´¦ÀíÊÂ¼ş
+    // æŒ‰ç…§yé€’å¢çš„é¡ºåºå¤„ç†äº‹ä»¶
     int inside[maxt];
     memset(inside, 0, sizeof(inside));
     sort(events.begin(), events.end());
     for(int j = 0; j < events.size()-1; j++) {
       inside[events[j].id] ^= 1;
-      if(fabs(events[j].y - events[j+1].y) < eps) continue; // yÏàÍ¬µÄÊÂ¼şÒªµÈµ½ËùÓĞinside¸üĞÂÍê±Ïºó²ÅÄÜ´¦Àí
+      if(fabs(events[j].y - events[j+1].y) < eps) continue; // yç›¸åŒçš„äº‹ä»¶è¦ç­‰åˆ°æ‰€æœ‰insideæ›´æ–°å®Œæ¯•åæ‰èƒ½å¤„ç†
 
-      // Í¶Ó°ÌİĞÎµÄÃæ»ıµÈÓÚÖĞÏß³ËÒÔ¸ß
+      // æŠ•å½±æ¢¯å½¢çš„é¢ç§¯ç­‰äºä¸­çº¿ä¹˜ä»¥é«˜
       double projection_area = (sx[i+1] - sx[i]) * (events[j+1].y - events[j].y);
 
-      // ÔÚÏÂÒ»¸öÊÂ¼ş·¢ÉúÖ®Ç°£¬ÄÄ¸öÈı½ÇĞÎÔÚ×îÉÏÃæ£¿
+      // åœ¨ä¸‹ä¸€ä¸ªäº‹ä»¶å‘ç”Ÿä¹‹å‰ï¼Œå“ªä¸ªä¸‰è§’å½¢åœ¨æœ€ä¸Šé¢ï¼Ÿ
       int top = -1;
       double topz = -1e9;
-      double yy = (events[j].y + events[j+1].y) / 2; // ²âÊÔy×ø±êÖĞµã£¬¼ÆËãzzÎó²î±È½ÏĞ¡
+      double yy = (events[j].y + events[j+1].y) / 2; // æµ‹è¯•yåæ ‡ä¸­ç‚¹ï¼Œè®¡ç®—zzè¯¯å·®æ¯”è¾ƒå°
       for(int k = 0; k < m; k++) if(inside[k]) {
         double zz = getTriangleZ(k, xx, yy);
-        if(zz > topz) { topz = zz; top = k; } // ¸üĞÂ×îÉÏÃæµÄÈı½ÇĞÎ±àºÅtop
+        if(zz > topz) { topz = zz; top = k; } // æ›´æ–°æœ€ä¸Šé¢çš„ä¸‰è§’å½¢ç¼–å·top
       }
 
-      // Í¶Ó°²¿·ÖÃæ»ı³ËÒÔ±ÈÀıÏµÊıµÈÓÚÊµ¼ÊÃæ»ı
+      // æŠ•å½±éƒ¨åˆ†é¢ç§¯ä¹˜ä»¥æ¯”ä¾‹ç³»æ•°ç­‰äºå®é™…é¢ç§¯
       if(top >= 0) ans += area_ratio[top] * projection_area;
     }
   }
@@ -137,7 +137,7 @@ double solve() {
 int main() {
   int kase = 0;
   while(scanf("%d%d", &n, &m) == 2 && n > 0) {
-    for(int i = 1; i <= n; i++) scanf("%d%d%d", &p[i].x, &p[i].y, &p[i].z); // ¶¥µã±àºÅÎª1~n
+    for(int i = 1; i <= n; i++) scanf("%d%d%d", &p[i].x, &p[i].y, &p[i].z); // é¡¶ç‚¹ç¼–å·ä¸º1~n
     for(int i = 0; i < m; i++) scanf("%d%d%d", &t[i][0], &t[i][1], &t[i][2]);
     init();
     double ans = solve();

@@ -1,4 +1,4 @@
-// UVa11297 Census£º´øbuildµÄ°æ±¾
+// UVa11297 Censusï¼šå¸¦buildçš„ç‰ˆæœ¬
 // Rujia Liu
 #include<algorithm>
 using namespace std;
@@ -10,7 +10,7 @@ int A[maxn][maxn];
 
 struct IntervalTree2D {
   int Max[maxn][maxn], Min[maxn][maxn], n, m;
-  int xo, xleaf, row, x1, y1, x2, y2, x, y, v, vmax, vmin; // ²ÎÊı¡¢²éÑ¯½á¹ûºÍÖĞ¼ä±äÁ¿
+  int xo, xleaf, row, x1, y1, x2, y2, x, y, v, vmax, vmin; // å‚æ•°ã€æŸ¥è¯¢ç»“æœå’Œä¸­é—´å˜é‡
 
   void query1D(int o, int L, int R) {
     if(y1 <= L && R <= y2) {
@@ -55,7 +55,7 @@ struct IntervalTree2D {
     }
   }
 
-  // Ö»¹¹½¨xoÎªÒ¶×Ó£¨¼´x1=x2£©µÄyÊ÷
+  // åªæ„å»ºxoä¸ºå¶å­ï¼ˆå³x1=x2ï¼‰çš„yæ ‘
   void build1D(int o, int L, int R) {
     if(L == R) Max[xo][o] = Min[xo][o] = A[row][L];
     else {

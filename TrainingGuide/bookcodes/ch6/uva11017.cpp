@@ -32,32 +32,32 @@ inline int gcd(int a, int b) {
   return b == 0 ? a : gcd(b, a%b);
 }
 
-// Ïß¶Îa-bÉÏµÄ¸ñµãÊý¡£²»°üº¬aºÍb¡£Éè²ÎÊýt = b/d£¬Ôòd±ØÐëÊÇb.x-a.xºÍb.y-a.yµÄ¹«Ô¼Êý£¬ÇÒ0<b<d
+// çº¿æ®µa-bä¸Šçš„æ ¼ç‚¹æ•°ã€‚ä¸åŒ…å«aå’Œbã€‚è®¾å‚æ•°t = b/dï¼Œåˆ™då¿…é¡»æ˜¯b.x-a.xå’Œb.y-a.yçš„å…¬çº¦æ•°ï¼Œä¸”0<b<d
 LL count_on_segment(const Point& a, const Point& b) {
-  return gcd(abs(b.x-a.x), abs(b.y-a.y)) - 1; // ¼õ1ÊÇÒòÎªÒªÅÅ³ý¶Ëµã£¬Òò´Ë0ºÍd¶¼²»ÄÜ×ö·Ö×Ó
+  return gcd(abs(b.x-a.x), abs(b.y-a.y)) - 1; // å‡1æ˜¯å› ä¸ºè¦æŽ’é™¤ç«¯ç‚¹ï¼Œå› æ­¤0å’Œdéƒ½ä¸èƒ½åšåˆ†å­
 }
 
 // Pick's Theorem: A = I + B/2 - 1 => I = A - B/2 + 1
 LL count_inside_polygon(const vector<Point>& poly) {
   int n = poly.size();
   LL A2 = PolygonArea2(poly);
-  int B = n; // ¶à±ßÐÎµÄ¶¥µã
+  int B = n; // å¤šè¾¹å½¢çš„é¡¶ç‚¹
   for(int i = 0; i < n; i++)
     B += count_on_segment(poly[i], poly[(i+1)%n]);
   return (A2 - B) / 2 + 1;
 }
 
-// ¼ÆËãÄÚ²¿µÄ¡¢xºÍyµÄÐ¡Êý²¿·Ö¶¼ÊÇ0.5µÄµã
+// è®¡ç®—å†…éƒ¨çš„ã€xå’Œyçš„å°æ•°éƒ¨åˆ†éƒ½æ˜¯0.5çš„ç‚¹
 LL count(const vector<Point>& poly) {
   vector<Point> poly2;
   for(int i = 0; i < poly.size(); i++)
-    poly2.push_back(Point(poly[i].x-poly[i].y, poly[i].x+poly[i].y)); // Ðý×ª45¶ÈºóµÄ³íÃÜÍø¸ñ×ø±ê
+    poly2.push_back(Point(poly[i].x-poly[i].y, poly[i].x+poly[i].y)); // æ—‹è½¬45åº¦åŽçš„ç¨ å¯†ç½‘æ ¼åæ ‡
   return count_inside_polygon(poly2) - count_inside_polygon(poly);
 }
 
 int main() {
   int d, theta, N, x, y;
-  while(scanf("%d%d%d", &d, &theta, &N) == 3 && d) { // thetaºÍd½ö½öÓÃÀ´ËãÃæ»ý
+  while(scanf("%d%d%d", &d, &theta, &N) == 3 && d) { // thetaå’Œdä»…ä»…ç”¨æ¥ç®—é¢ç§¯
     vector<Point> poly;
     for(int i = 0; i < N; i++) {
       scanf("%d%d", &x, &y);

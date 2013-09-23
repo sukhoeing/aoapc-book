@@ -29,9 +29,9 @@ inline LL Cross(Point p, Point p1, Point p2) {
   return (LL)(p1.x - p.x) * (LL)(p2.y - p.y) - (LL)(p1.y - p.y)*(LL)(p2.x - p.x);
 }
 
-// ÓÉÓÚÏß¶ÎÏà½»ÅĞ¶¨Ö´ĞĞ´ÎÊı½Ï´ó£¬ÕâÀï²ÉÓÃÁËÒ»Ğ©Ğ¡ÓÅ»¯
+// ç”±äºçº¿æ®µç›¸äº¤åˆ¤å®šæ‰§è¡Œæ¬¡æ•°è¾ƒå¤§ï¼Œè¿™é‡Œé‡‡ç”¨äº†ä¸€äº›å°ä¼˜åŒ–
 inline bool SegmentIntersection(const Point& a1, const Point& a2, const Point& b1, const Point& b2) {
-  if(min(a1.x, a2.x) > max(b1.x, b2.x)) return false; // ¿ìËÙÅÅ³ı
+  if(min(a1.x, a2.x) > max(b1.x, b2.x)) return false; // å¿«é€Ÿæ’é™¤
   if(min(a1.y, a2.y) > max(b1.y, b2.y)) return false;
   if(max(a1.x, a2.x) < min(b1.x, b2.x)) return false;
   if(max(a1.y, a2.y) < min(b1.y, b2.y)) return false;
@@ -46,7 +46,7 @@ const double eps = 1e-6;
 
 struct Segment {
   Point p1, p2;
-  int no; // Èı½ÇĞÎ±àºÅ
+  int no; // ä¸‰è§’å½¢ç¼–å·
   double d;
   Segment(Point p1, Point p2, int no):p1(p1),p2(p2),no(no) {
     d = (p2.y - p1.y) / (p2.x + eps - p1.x);
@@ -60,16 +60,16 @@ inline bool Intersect(const Segment& a, const Segment& b) {
   return SegmentIntersection(a.p1, a.p2, b.p1, b.p2);
 }
 
-bool error;    // ÊÇ·ñÒÑ¾­³öÏÖÏà½»Ïß¶Î
-int max_depth; // µ±Ç°×î´óÉî¶È
+bool error;    // æ˜¯å¦å·²ç»å‡ºç°ç›¸äº¤çº¿æ®µ
+int max_depth; // å½“å‰æœ€å¤§æ·±åº¦
 
 const int INF = 200000;
 
-// ±¾ÌâÕâÑù×ö¿ÉÒÔÌá¸ß´úÂë¿É¶ÁĞÔ£¬µ«²»ÒªÔÚ¹¤³ÌÖĞÕâÑùÊ¹ÓÃ£¬·Ç³£Î£ÏÕ
+// æœ¬é¢˜è¿™æ ·åšå¯ä»¥æé«˜ä»£ç å¯è¯»æ€§ï¼Œä½†ä¸è¦åœ¨å·¥ç¨‹ä¸­è¿™æ ·ä½¿ç”¨ï¼Œéå¸¸å±é™©
 #define L first   
 #define depth second
 
-// É¨ÃèÏßÀà£¬ÓÃÒ»¸ömultimapÊµÏÖ
+// æ‰«æçº¿ç±»ï¼Œç”¨ä¸€ä¸ªmultimapå®ç°
 struct Scanline {
   multimap<Segment, int> line;
   typedef multimap<Segment, int>::iterator Pos;
@@ -92,7 +92,7 @@ struct Scanline {
 } scanline;
 
 struct Triangle {
-  int no; // ±àºÅ
+  int no; // ç¼–å·
   Point P[3];
   Scanline::Pos p12, p13, p23;
   void read(int no) {
@@ -100,14 +100,14 @@ struct Triangle {
     for(int i = 0; i < 3; i++) scanf("%d%d", &P[i].x, &P[i].y);
     sort(P, P+3);
   }
-  // ¸üĞÂx1ºÍx2µÄdepth¡£ÆäÖĞx1ÊÇp12ºÍp13ÖĞy½ÏĞ¡µÄÄÇ¸ö£¬x2ÊÇÁíÒ»¸ö£¨¼´Next(x1)=x2£©
+  // æ›´æ–°x1å’Œx2çš„depthã€‚å…¶ä¸­x1æ˜¯p12å’Œp13ä¸­yè¾ƒå°çš„é‚£ä¸ªï¼Œx2æ˜¯å¦ä¸€ä¸ªï¼ˆå³Next(x1)=x2ï¼‰
   void updateDepth(const Scanline::Pos& x1, Scanline::Pos& x2) {
     int d = scanline.Prev(x1)->depth + 1;
     max_depth = max(max_depth, d);
     x1->depth = d;
     x2->depth = d - 1;
   }
-  // ´¦ÀíµÚv¸ö½áµã
+  // å¤„ç†ç¬¬vä¸ªç»“ç‚¹
   void process(int v) {
     if(v == 0) {
       p12 = scanline.Insert(Segment(P[0], P[1], no));
@@ -126,7 +126,7 @@ struct Triangle {
 };
 
 struct Event {
-  int x, t, v; // x×ø±ê£¬Èı½ÇĞÎ±àºÅºÍ¶¥µã±àºÅ
+  int x, t, v; // xåæ ‡ï¼Œä¸‰è§’å½¢ç¼–å·å’Œé¡¶ç‚¹ç¼–å·
   Event(){}
   Event(int x, int t, int v):x(x),t(t),v(v){}
   bool operator < (const Event& rhs) const {
@@ -134,7 +134,7 @@ struct Event {
   }
 };
 
-const int maxn = 100000 + 10; // ×î´óÈı½ÇĞÎ¸öÊı
+const int maxn = 100000 + 10; // æœ€å¤§ä¸‰è§’å½¢ä¸ªæ•°
 Triangle tri[maxn];
 Event events[maxn*3];
 

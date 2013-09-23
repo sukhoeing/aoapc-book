@@ -1,4 +1,4 @@
-// LA4488 Final Combat£ºÕýÈ·°æ
+// LA4488 Final Combatï¼šæ­£ç¡®ç‰ˆ
 // Rujia Liu
 #include<iostream>
 #include<vector>

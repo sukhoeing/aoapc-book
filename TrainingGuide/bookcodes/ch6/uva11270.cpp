@@ -18,10 +18,10 @@ long long solve(int n, int m) {
   cur = 0;
   d[0][(1<<m)-1] = 1;
   for(int i = 0; i < n; i++)
-    for(int j = 0; j < m; j++) { // ö�ٵ�ǰҪ��Ľ׶�
+    for(int j = 0; j < m; j++) { // 枚举当前要算的阶段
       cur ^= 1;
       memset(d[cur], 0, sizeof(d[cur]));
-      for(int k = 0; k < (1<<m); k++) { // ö���ϸ��׶ε�״̬
+      for(int k = 0; k < (1<<m); k++) { // 枚举上个阶段的状态
         up(k, k<<1);
         if(i && !(k&(1<<m-1))) up(k, (k<<1)^(1<<m)^1);
         if(j && !(k&1)) up(k, (k<<1)^3);

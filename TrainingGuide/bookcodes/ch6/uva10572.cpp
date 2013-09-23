@@ -8,17 +8,17 @@
 using namespace std;
 
 int nrows, ncols, has_sol;
-char partial[8][9]; // ÊäÈëÍø¸ñ
-char grid[8][8], sol[8][8]; // µ±Ç°ÕıÔÚÌîµÄÍø¸ñºÍ½âÍø¸ñ
+char partial[8][9]; // è¾“å…¥ç½‘æ ¼
+char grid[8][8], sol[8][8]; // å½“å‰æ­£åœ¨å¡«çš„ç½‘æ ¼å’Œè§£ç½‘æ ¼
 
 struct State {
-  char color[8];       // ¸÷ÁĞ¸ñ×ÓÑÕÉ«
-  char up_left;        // ×óÉÏ·½¸ñ×ÓÑÕÉ«£¨ÓÃÀ´ÅĞ¶ÏÊÇ·ñ³öÏÖ2x2Í¬É«×ÓÍø¸ñ£©
-  char comp[8];        // ¸÷¸ñ×ÓÁ¬Í¨·ÖÁ¿
-  char ncomp;          // Á¬Í¨·ÖÁ¿×ÜÊı
-  char ncolor_comp[2]; // °×Á¬Í¨·ÖÁ¿¸öÊıºÍºÚÁ¬Í¨·ÖÁ¿¸öÊı
+  char color[8];       // å„åˆ—æ ¼å­é¢œè‰²
+  char up_left;        // å·¦ä¸Šæ–¹æ ¼å­é¢œè‰²ï¼ˆç”¨æ¥åˆ¤æ–­æ˜¯å¦å‡ºç°2x2åŒè‰²å­ç½‘æ ¼ï¼‰
+  char comp[8];        // å„æ ¼å­è¿é€šåˆ†é‡
+  char ncomp;          // è¿é€šåˆ†é‡æ€»æ•°
+  char ncolor_comp[2]; // ç™½è¿é€šåˆ†é‡ä¸ªæ•°å’Œé»‘è¿é€šåˆ†é‡ä¸ªæ•°
 
-  // ¼ÆËã×´Ì¬µÄ×îĞ¡±íÊ¾
+  // è®¡ç®—çŠ¶æ€çš„æœ€å°è¡¨ç¤º
   void normalize() {
     int rep[10];
     memset(rep, -1, sizeof(rep));
@@ -32,14 +32,14 @@ struct State {
     }
   }
 
-  // °ÑËùÓĞ±àºÅÎªbµÄÁ¬Í¨·ÖÁ¿¸Ä³Éa
+  // æŠŠæ‰€æœ‰ç¼–å·ä¸ºbçš„è¿é€šåˆ†é‡æ”¹æˆa
   void merge(int a, int b) {
     if (a == b) return;
     for (int i = 0; i < ncols; i++)
       if (comp[i] == b) comp[i] = a;
   }
 
-  // ÕıºÃ²»³¬¹ı32Î»ÎŞ·ûºÅÕûÊı·¶Î§
+  // æ­£å¥½ä¸è¶…è¿‡32ä½æ— ç¬¦å·æ•´æ•°èŒƒå›´
   unsigned int encode() {
     unsigned int key = 0;
     for (int i = 0; i < ncols; i++)
@@ -48,15 +48,15 @@ struct State {
   }
 };
 
-// ¶¯Ì¬¹æ»®ËùÓÃ×´Ì¬Öµ±í¡£Ö»¼ÇÂ¼ÁË²»Ç¿ÖÆÍ¿É«£¨¼´force_color<0£©Ê±µÄÖµ
+// åŠ¨æ€è§„åˆ’æ‰€ç”¨çŠ¶æ€å€¼è¡¨ã€‚åªè®°å½•äº†ä¸å¼ºåˆ¶æ¶‚è‰²ï¼ˆå³force_color<0ï¼‰æ—¶çš„å€¼
 map<unsigned, int> memo[8][8][2]; 
 
 const int ch[] = { 'o', '#' };
 
-// µ±Ç°ÒªÍ¿¸ñ×Ó(row, col)£¬×´Ì¬ÎªS£¬±ØĞëÍ¿force_colorÑÕÉ«¡£·µ»Ø½âµÄ¸öÊı
+// å½“å‰è¦æ¶‚æ ¼å­(row, col)ï¼ŒçŠ¶æ€ä¸ºSï¼Œå¿…é¡»æ¶‚force_coloré¢œè‰²ã€‚è¿”å›è§£çš„ä¸ªæ•°
 int rec(int row, int col, State& S, int force_color) {
   if (col == ncols) { col = 0; row++; }
-  S.normalize(); // ¼ÆËã×îĞ¡±íÊ¾
+  S.normalize(); // è®¡ç®—æœ€å°è¡¨ç¤º
 
   if (row == nrows) {
     if (S.ncolor_comp[0] > 1 || S.ncolor_comp[1] > 1) return 0;
@@ -69,11 +69,11 @@ int rec(int row, int col, State& S, int force_color) {
     return 1;
   }
 
-  // Èç¹û×ó¸ñ×ÓºÍÉÏ¸ñ×ÓÑÕÉ«²»Í¬£¬Ôò×óÉÏ·½¸ñ×ÓµÄÑÕÉ«ÊÇÎŞ¹Ø½ôÒªµÄ£¬Í³Ò»ÉèÎª0£¬¼õÉÙ×´Ì¬
+  // å¦‚æœå·¦æ ¼å­å’Œä¸Šæ ¼å­é¢œè‰²ä¸åŒï¼Œåˆ™å·¦ä¸Šæ–¹æ ¼å­çš„é¢œè‰²æ˜¯æ— å…³ç´§è¦çš„ï¼Œç»Ÿä¸€è®¾ä¸º0ï¼Œå‡å°‘çŠ¶æ€
   if (row > 0 && col > 0 && S.color[col] != S.color[col-1])
     S.up_left = 0;
 
-  // Ö»ÓĞ²»Ç¿ÖÆÍ¿É«£¨force_color<0£©Ê±key²ÅÓĞÒâÒå
+  // åªæœ‰ä¸å¼ºåˆ¶æ¶‚è‰²ï¼ˆforce_color<0ï¼‰æ—¶keyæ‰æœ‰æ„ä¹‰
   unsigned int key;
   if (force_color < 0) {
     key = S.encode();
@@ -83,24 +83,24 @@ int rec(int row, int col, State& S, int force_color) {
 
   int res = 0;
 
-  // µ±Ç°¸ñ×ÓÍ¿colorÕâÖÖÑÕÉ«
+  // å½“å‰æ ¼å­æ¶‚colorè¿™ç§é¢œè‰²
   for(int color = 0; color < 2; color++) {
-    if (force_color == 1 - color) continue; // ºÍforce_colorÃ¬¶Ü
-    if (partial[row][col] == ch[1-color]) continue; // ºÍÊäÈëÃ¬¶Ü
-    if (row > 0 && col > 0 && S.color[col-1] == color && S.color[col] == color && S.up_left == color) continue; // ³öÏÖ2x2Í¬É«×ÓÍø¸ñ
+    if (force_color == 1 - color) continue; // å’Œforce_colorçŸ›ç›¾
+    if (partial[row][col] == ch[1-color]) continue; // å’Œè¾“å…¥çŸ›ç›¾
+    if (row > 0 && col > 0 && S.color[col-1] == color && S.color[col] == color && S.up_left == color) continue; // å‡ºç°2x2åŒè‰²å­ç½‘æ ¼
 
     State T = S;
     T.color[col] = color;
     T.up_left = S.color[col];
-    T.comp[col] = (row > 0 && S.color[col] == color) ? S.comp[col] : S.ncomp; // ³õÊ¼»¯ĞÂ×´Ì¬µÚcolÁĞµÄÁ¬Í¨·ÖÁ¿±àºÅ
-    if (col > 0 && T.color[col-1] == color) T.merge(T.comp[col-1], T.comp[col]); // Èç¹ûÑÕÉ«ºÍ×ó¸ñ×ÓÏàÍ¬£¬ÔòÉèÖÃÎª×ó¸ñ×ÓµÄÁ¬Í¨·ÖÁ¿
+    T.comp[col] = (row > 0 && S.color[col] == color) ? S.comp[col] : S.ncomp; // åˆå§‹åŒ–æ–°çŠ¶æ€ç¬¬colåˆ—çš„è¿é€šåˆ†é‡ç¼–å·
+    if (col > 0 && T.color[col-1] == color) T.merge(T.comp[col-1], T.comp[col]); // å¦‚æœé¢œè‰²å’Œå·¦æ ¼å­ç›¸åŒï¼Œåˆ™è®¾ç½®ä¸ºå·¦æ ¼å­çš„è¿é€šåˆ†é‡
 
     grid[row][col] = ch[color];
 
-    if (row > 0 && S.color[col] == 1-color) { // ¼ì²éÉÏ·½¸ñ×ÓÊÇ·ñÎª¶ÀÁ¢Á¬Í¨·ÖÁ¿      
-      if (find(T.comp, T.comp+ncols, S.comp[col]) == T.comp+ncols) { // ¸ÃÁ¬Í¨·ÖÁ¿ÒÑ¾­ÏûÊ§
-        if (S.ncolor_comp[1-color] > 1 || row < nrows-2) continue; // Èç¹ûcolor»¹ÓĞÆäËûÁ¬Í¨·ÖÁ¿´æÔÚ£¬»òÕßÖÁÉÙ»¹ÓĞÁ½ĞĞĞèÒªÍ¿£¬ÔòÎŞ·¨¼ÌĞø
-        res += rec(row, col+1, T, color); // ¿ÉÒÔ¼ÌĞø£¬µ«ÒÔºóÇ¿ÖÆÍ¿color
+    if (row > 0 && S.color[col] == 1-color) { // æ£€æŸ¥ä¸Šæ–¹æ ¼å­æ˜¯å¦ä¸ºç‹¬ç«‹è¿é€šåˆ†é‡      
+      if (find(T.comp, T.comp+ncols, S.comp[col]) == T.comp+ncols) { // è¯¥è¿é€šåˆ†é‡å·²ç»æ¶ˆå¤±
+        if (S.ncolor_comp[1-color] > 1 || row < nrows-2) continue; // å¦‚æœcolorè¿˜æœ‰å…¶ä»–è¿é€šåˆ†é‡å­˜åœ¨ï¼Œæˆ–è€…è‡³å°‘è¿˜æœ‰ä¸¤è¡Œéœ€è¦æ¶‚ï¼Œåˆ™æ— æ³•ç»§ç»­
+        res += rec(row, col+1, T, color); // å¯ä»¥ç»§ç»­ï¼Œä½†ä»¥åå¼ºåˆ¶æ¶‚color
         continue;
       }
     }

@@ -52,15 +52,15 @@ int isPointInPolygon(const Point& p, Point* poly, int n){
   for(int i = 0; i < n; i++){
     const Point& p1 = poly[i];
     const Point& p2 = poly[(i+1)%n];
-    if(p1 == p || p2 == p || OnSegment(p, p1, p2)) return -1; // ÔÚ±ß½çÉÏ
+    if(p1 == p || p2 == p || OnSegment(p, p1, p2)) return -1; // åœ¨è¾¹ç•Œä¸Š
     int k = dcmp(Cross(p2-p1, p-p1));
     int d1 = dcmp(p1.y - p.y);
     int d2 = dcmp(p2.y - p.y);
     if(k > 0 && d1 <= 0 && d2 > 0) wn++;
     if(k < 0 && d2 <= 0 && d1 > 0) wn--;
   }
-  if (wn != 0) return 1; // ÄÚ²¿
-  return 0; // Íâ²¿
+  if (wn != 0) return 1; // å†…éƒ¨
+  return 0; // å¤–éƒ¨
 }
 
 const int maxn = 100 + 10;
@@ -83,9 +83,9 @@ struct Dijkstra {
   int n, m;
   vector<Edge> edges;
   vector<int> G[maxn];
-  bool done[maxn];    // ÊÇ·ñÒÑÓÀ¾Ã±êºÅ
-  double d[maxn];     // sµ½¸÷¸öµãµÄ¾àÀë
-  int p[maxn];        // ×î¶ÌÂ·ÖĞµÄÉÏÒ»Ìõ»¡
+  bool done[maxn];    // æ˜¯å¦å·²æ°¸ä¹…æ ‡å·
+  double d[maxn];     // såˆ°å„ä¸ªç‚¹çš„è·ç¦»
+  int p[maxn];        // æœ€çŸ­è·¯ä¸­çš„ä¸Šä¸€æ¡å¼§
 
   void init(int n) {
     this->n = n;
@@ -123,26 +123,26 @@ struct Dijkstra {
 };
 
 int n;
-Point startp, belt[maxn]; // ÎªÁË·½±ã£¬belt[n]ÊÇÆğµã£¬belt[n+1]ÊÇÖÕµã
+Point startp, belt[maxn]; // ä¸ºäº†æ–¹ä¾¿ï¼Œbelt[n]æ˜¯èµ·ç‚¹ï¼Œbelt[n+1]æ˜¯ç»ˆç‚¹
 double vl, vp, perimeter, len[maxn];
 Dijkstra solver;
 
-// ±ßa-bÊÇ·ñ±»µ²×¡
+// è¾¹a-bæ˜¯å¦è¢«æŒ¡ä½
 bool isBlocked(int a, int b) {
   for(int i = 0; i < n+2; i++)
-    if(i != a && i != b && OnSegment(belt[i], belt[a], belt[b])) return true; // ÖĞ¼ä²»ÄÜÓĞÆäËûµã
+    if(i != a && i != b && OnSegment(belt[i], belt[a], belt[b])) return true; // ä¸­é—´ä¸èƒ½æœ‰å…¶ä»–ç‚¹
   for(int i = 0; i < n; i++)
-    if(SegmentProperIntersection(belt[i], belt[(i+1)%n], belt[a], belt[b])) return true; // ²»ÄÜºÍ¶à±ßĞÎµÄ±ß¹æ·¶Ïà½»
+    if(SegmentProperIntersection(belt[i], belt[(i+1)%n], belt[a], belt[b])) return true; // ä¸èƒ½å’Œå¤šè¾¹å½¢çš„è¾¹è§„èŒƒç›¸äº¤
   Point midp = (belt[a] + belt[b]) * 0.5;
-  if(isPointInPolygon(midp, belt, n) == 1) return true; // ÕûÌõÏß¶ÎÔÚ¶à±ßĞÎÄÚ
+  if(isPointInPolygon(midp, belt, n) == 1) return true; // æ•´æ¡çº¿æ®µåœ¨å¤šè¾¹å½¢å†…
   return false;
 }
 
-// ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÔÚÊ±¿ÌtÄÃµ½ĞĞÀî
+// åˆ¤æ–­æ˜¯å¦å¯ä»¥åœ¨æ—¶åˆ»tæ‹¿åˆ°è¡Œæ
 bool check(double t) {
-  solver.init(n+2); // 0~n-1ÊÇ´«ËÍ´ø¶¥µã£¬nÊÇÆğµã£¬n+1ÊÇÖÕµã
+  solver.init(n+2); // 0~n-1æ˜¯ä¼ é€å¸¦é¡¶ç‚¹ï¼Œnæ˜¯èµ·ç‚¹ï¼Œn+1æ˜¯ç»ˆç‚¹
 
-  // ¼ÆËãĞĞÀîÎ»ÖÃ£¬´æ·Åµ½belt[n+1]
+  // è®¡ç®—è¡Œæä½ç½®ï¼Œå­˜æ”¾åˆ°belt[n+1]
   double dist = fmod(vl*t, perimeter);
   for(int i = 0; i < n; i++) {
     if(len[i] >= dist) {
@@ -152,7 +152,7 @@ bool check(double t) {
     dist -= len[i];
   }
 
-  // ¹¹Í¼
+  // æ„å›¾
   for(int i = 0; i < n+2; i++)
     for(int j = i+1; j < n+2; j++) {
       double d = Length(belt[i]-belt[j]);
@@ -176,13 +176,13 @@ int main() {
     perimeter = 0;
     double closest = 1e9;
     for(int i = 0; i < n; i++) {
-      closest = min(closest, Length(startp - belt[i])); // ¸üĞÂÈËµ½×î½ü¶¥µãµÄ¾àÀë
+      closest = min(closest, Length(startp - belt[i])); // æ›´æ–°äººåˆ°æœ€è¿‘é¡¶ç‚¹çš„è·ç¦»
       len[i] = Length(belt[i] - belt[(i+1)%n]);
-      perimeter += len[i]; // ÀÛ¼ÓÖÜ³¤
+      perimeter += len[i]; // ç´¯åŠ å‘¨é•¿
     }
     belt[n] = startp;
-    double L = 0, R = (closest + perimeter / 2) / vp; // ÉÏ½çÎªÈË×ßµ½×î½ü¶¥µãÔÙ×ß°ëÖÜ³¤ËùĞèÒªµÄÊ±¼ä
-    while(getSecond(L) != getSecond(R)) { // ÕâÑùĞ´×î±£ÏÕ¡£LºÍRºÜ½Ó½ü²»´ú±íËÄÉáÎåÈëµ½¡°Ãë¡±ºóÒ»¶¨Ò»Ñù
+    double L = 0, R = (closest + perimeter / 2) / vp; // ä¸Šç•Œä¸ºäººèµ°åˆ°æœ€è¿‘é¡¶ç‚¹å†èµ°åŠå‘¨é•¿æ‰€éœ€è¦çš„æ—¶é—´
+    while(getSecond(L) != getSecond(R)) { // è¿™æ ·å†™æœ€ä¿é™©ã€‚Lå’ŒRå¾ˆæ¥è¿‘ä¸ä»£è¡¨å››èˆäº”å…¥åˆ°â€œç§’â€åä¸€å®šä¸€æ ·
       double M = L + (R-L)/2;
       if(check(M)) R = M; else L = M;
     }

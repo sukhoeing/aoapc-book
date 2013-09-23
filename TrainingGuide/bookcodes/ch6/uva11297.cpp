@@ -7,7 +7,7 @@ const int INF = 1<<30;
 const int maxn = 2000 + 10;
 struct IntervalTree2D {
   int Max[maxn][maxn], Min[maxn][maxn], n, m;
-  int xo, xleaf, x1, y1, x2, y2, x, y, v, vmax, vmin; // 参数、查询结果和中间变量
+  int xo, xleaf, x1, y1, x2, y2, x, y, v, vmax, vmin; // 鍙傛暟銆佹煡璇㈢粨鏋滃拰涓棿鍙橀噺
 
   void query1D(int o, int L, int R) {
     if(y1 <= L && R <= y2) {

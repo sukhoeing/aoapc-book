@@ -6,22 +6,22 @@
 #include<cassert>
 using namespace std;
 
-// ¸Ä½øµ¥´¿ĞÔ·¨µÄÊµÏÖ
-// ²Î¿¼£ºhttp://en.wikipedia.org/wiki/Simplex_algorithm
-// ÊäÈë¾ØÕóaÃèÊöÏßĞÔ¹æ»®µÄ±ê×¼ĞÎÊ½¡£aÎªm+1ĞĞn+1ÁĞ£¬ÆäÖĞĞĞ0~m-1Îª²»µÈÊ½£¬ĞĞmÎªÄ¿±êº¯Êı£¨×î´ó»¯£©¡£ÁĞ0~n-1Îª±äÁ¿0~n-1µÄÏµÊı£¬ÁĞnÎª³£ÊıÏî
-// µÚi¸öÔ¼ÊøÎªa[i][0]*x[0] + a[i][1]*x[1] + ... <= a[i][n]
-// Ä¿±êÎªmax(a[m][0]*x[0] + a[m][1]*x[1] + ... + a[m][n-1]*x[n-1] - a[m][n])
-// ×¢Òâ£º±äÁ¿¾ùÓĞ·Ç¸ºÔ¼Êøx[i] >= 0
-const int maxm = 500; // Ô¼ÊøÊıÄ¿ÉÏÏŞ
-const int maxn = 500; // ±äÁ¿ÊıÄ¿ÉÏÏŞ
+// æ”¹è¿›å•çº¯æ€§æ³•çš„å®ç°
+// å‚è€ƒï¼šhttp://en.wikipedia.org/wiki/Simplex_algorithm
+// è¾“å…¥çŸ©é˜µaæè¿°çº¿æ€§è§„åˆ’çš„æ ‡å‡†å½¢å¼ã€‚aä¸ºm+1è¡Œn+1åˆ—ï¼Œå…¶ä¸­è¡Œ0~m-1ä¸ºä¸ç­‰å¼ï¼Œè¡Œmä¸ºç›®æ ‡å‡½æ•°ï¼ˆæœ€å¤§åŒ–ï¼‰ã€‚åˆ—0~n-1ä¸ºå˜é‡0~n-1çš„ç³»æ•°ï¼Œåˆ—nä¸ºå¸¸æ•°é¡¹
+// ç¬¬iä¸ªçº¦æŸä¸ºa[i][0]*x[0] + a[i][1]*x[1] + ... <= a[i][n]
+// ç›®æ ‡ä¸ºmax(a[m][0]*x[0] + a[m][1]*x[1] + ... + a[m][n-1]*x[n-1] - a[m][n])
+// æ³¨æ„ï¼šå˜é‡å‡æœ‰éè´Ÿçº¦æŸx[i] >= 0
+const int maxm = 500; // çº¦æŸæ•°ç›®ä¸Šé™
+const int maxn = 500; // å˜é‡æ•°ç›®ä¸Šé™
 const double INF = 1e100;
 const double eps = 1e-10;
 
 struct Simplex {
-  int n; // ±äÁ¿¸öÊı
-  int m; // Ô¼Êø¸öÊı
-  double a[maxm][maxn]; // ÊäÈë¾ØÕó
-  int B[maxm], N[maxn]; // Ëã·¨¸¨Öú±äÁ¿
+  int n; // å˜é‡ä¸ªæ•°
+  int m; // çº¦æŸä¸ªæ•°
+  double a[maxm][maxn]; // è¾“å…¥çŸ©é˜µ
+  int B[maxm], N[maxn]; // ç®—æ³•è¾…åŠ©å˜é‡
 
   void pivot(int r, int c) {
     swap(N[c], B[r]);
@@ -51,7 +51,7 @@ struct Simplex {
     }
   }
 
-  // ½âÓĞ½ç·µ»Ø1£¬ÎŞ½â·µ»Ø0£¬ÎŞ½ç·µ»Ø-1¡£b[i]Îªx[i]µÄÖµ£¬retÎªÄ¿±êº¯ÊıµÄÖµ
+  // è§£æœ‰ç•Œè¿”å›1ï¼Œæ— è§£è¿”å›0ï¼Œæ— ç•Œè¿”å›-1ã€‚b[i]ä¸ºx[i]çš„å€¼ï¼Œretä¸ºç›®æ ‡å‡½æ•°çš„å€¼
   int simplex(int n, int m, double x[maxn], double& ret) {
     this->n = n;
     this->m = m;
@@ -79,15 +79,15 @@ struct Simplex {
   }
 };
 
-//////////////// ÌâÄ¿Ïà¹Ø
+//////////////// é¢˜ç›®ç›¸å…³
 #include<cmath>
 Simplex solver;
 
 int main() {
   int n, m;
   while(scanf("%d%d", &n, &m) == 2) {
-    for(int i = 0; i < n; i++) scanf("%lf", &solver.a[m][i]); // Ä¿±êº¯Êı
-    solver.a[m][n] = 0; // Ä¿±êº¯Êı³£ÊıÏî
+    for(int i = 0; i < n; i++) scanf("%lf", &solver.a[m][i]); // ç›®æ ‡å‡½æ•°
+    solver.a[m][n] = 0; // ç›®æ ‡å‡½æ•°å¸¸æ•°é¡¹
     for(int i = 0; i < m; i++)
       for(int j = 0; j < n+1; j++)
         scanf("%lf", &solver.a[i][j]);

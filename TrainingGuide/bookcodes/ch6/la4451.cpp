@@ -14,10 +14,10 @@ const int maxn = 20;
 int n, deck[maxn*2];
 
 struct State {
-  int card[8], type[8]; // Á½ÕÅÏàÍ¬µÄFLOORÅÆ´ú±íÒ»ÕÅÕæÊµµÄFLOORÅÆ
+  int card[8], type[8]; // ä¸¤å¼ ç›¸åŒçš„FLOORç‰Œä»£è¡¨ä¸€å¼ çœŸå®çš„FLOORç‰Œ
   int hold[2];
   int pos;
-  int score; // MAXÓÎÏ·Õß(¼´Axel)µÄµÃ·Ö
+  int score; // MAXæ¸¸æˆè€…(å³Axel)çš„å¾—åˆ†
 
   State child() const {
     State s;
@@ -54,16 +54,16 @@ struct State {
   void expand(int player, vector<State>& ret) const {
     int cur = deck[pos];
 
-    // ¾ö²ß1£ºÄÃÔÚÊÖÀï
+    // å†³ç­–1ï¼šæ‹¿åœ¨æ‰‹é‡Œ
     if(hold[player] == 0) {
       State s = child();
       s.hold[player] = cur;
       ret.push_back(s);
     }
 
-    // ¾ö²ß2£º°ÚÂ¥ÃæÅÆ
+    // å†³ç­–2ï¼šæ‘†æ¥¼é¢ç‰Œ
     for(int i = 0; i < 7; i++) if(type[i] == DOWN && type[i+1] == UP) {
-      // ÓÃµ±Ç°µÄÅÆ
+      // ç”¨å½“å‰çš„ç‰Œ
       State s = child();
       s.score += getScore(card[i], card[i+1], cur);
       s.type[i] = s.type[i+1] = FLOOR;
@@ -71,7 +71,7 @@ struct State {
       ret.push_back(s);
       
       if(hold[player] != 0) {
-        // ÓÃÊÖÀïµÄÅÆ
+        // ç”¨æ‰‹é‡Œçš„ç‰Œ
         State s = child();
         s.score += getScore(card[i], card[i+1], hold[player]);
         s.type[i] = s.type[i+1] = FLOOR; 
@@ -81,7 +81,7 @@ struct State {
       }
     }
 
-    // ¾ö²ß3£ºĞÂµÄÉ½·å
+    // å†³ç­–3ï¼šæ–°çš„å±±å³°
     if(hold[player] != 0)
       for(int i = 0; i < 7; i++) if(type[i] == FLOOR && type[i+1] == FLOOR && card[i] == card[i+1]) {
         State s = child();
@@ -96,18 +96,18 @@ struct State {
   }
 };
 
-// ´øalpha-beta¼ôÖ¦µÄ¶Ô¿¹ËÑË÷
+// å¸¦alpha-betaå‰ªæçš„å¯¹æŠ—æœç´¢
 int alphabeta(State& s, int player, int alpha, int beta) {
-  if(s.isFinal()) return s.score; // ÖÕÌ¬
+  if(s.isFinal()) return s.score; // ç»ˆæ€
 
   vector<State> children;
-  s.expand(player, children); // À©Õ¹×Ó½áµã
+  s.expand(player, children); // æ‰©å±•å­ç»“ç‚¹
 
   int n = children.size();
   for(int i = 0; i < n; i++) {
     int v = alphabeta(children[i], player^1, alpha, beta);
     if(!player) alpha = max(alpha, v); else beta = min(beta, v);
-    if(beta <= alpha) break; // alpha-beta¼ôÖ¦
+    if(beta <= alpha) break; // alpha-betaå‰ªæ
   }
   return !player ? alpha : beta;
 }
