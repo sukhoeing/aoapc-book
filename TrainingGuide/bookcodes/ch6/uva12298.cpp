@@ -9,10 +9,10 @@ const long double PI = acos(0.0) * 2.0;
 
 typedef complex<double> CD;
 
-// Cooley-TukeyµÄFFTËã·¨£¬µü´úÊµÏÖ¡£inverse = falseÊ±¼ÆËãÄæFFT
+// Cooley-Tukeyçš„FFTç®—æ³•ï¼Œè¿­ä»£å®ç°ã€‚inverse = falseæ—¶è®¡ç®—é€†FFT
 inline void FFT(vector<CD> &a, bool inverse) {
   int n = a.size();
-  // Ô­µØ¿ìËÙbit reversal
+  // åŸåœ°å¿«é€Ÿbit reversal
   for(int i = 0, j = 0; i < n; i++) {
     if(j > i) swap(a[i], a[j]);
     int k = n;
@@ -22,20 +22,20 @@ inline void FFT(vector<CD> &a, bool inverse) {
 
   double pi = inverse ? -PI : PI;
   for(int step = 1; step < n; step <<= 1) {
-    // °ÑÃ¿ÏàÁÚÁ½¸ö¡°stepµãDFT¡±Í¨¹ıÒ»ÏµÁĞºûµû²Ù×÷ºÏ²¢ÎªÒ»¸ö¡°2*stepµãDFT¡±
+    // æŠŠæ¯ç›¸é‚»ä¸¤ä¸ªâ€œstepç‚¹DFTâ€é€šè¿‡ä¸€ç³»åˆ—è´è¶æ“ä½œåˆå¹¶ä¸ºä¸€ä¸ªâ€œ2*stepç‚¹DFTâ€
     double alpha = pi / step;
-    // ÎªÇó¸ßĞ§£¬ÎÒÃÇ²¢²»ÊÇÒÀ´ÎÖ´ĞĞ¸÷¸öÍêÕûµÄDFTºÏ²¢£¬¶øÊÇÃ¶¾ÙÏÂ±êk
-    // ¶ÔÓÚÒ»¸öÏÂ±êk£¬Ö´ĞĞËùÓĞDFTºÏ²¢ÖĞ¸ÃÏÂ±ê¶ÔÓ¦µÄºûµû²Ù×÷£¬¼´Í¨¹ıE[k]ºÍO[k]¼ÆËãX[k]
-    // ºûµû²Ù×÷²Î¿¼£ºhttp://en.wikipedia.org/wiki/Butterfly_diagram
+    // ä¸ºæ±‚é«˜æ•ˆï¼Œæˆ‘ä»¬å¹¶ä¸æ˜¯ä¾æ¬¡æ‰§è¡Œå„ä¸ªå®Œæ•´çš„DFTåˆå¹¶ï¼Œè€Œæ˜¯æšä¸¾ä¸‹æ ‡k
+    // å¯¹äºä¸€ä¸ªä¸‹æ ‡kï¼Œæ‰§è¡Œæ‰€æœ‰DFTåˆå¹¶ä¸­è¯¥ä¸‹æ ‡å¯¹åº”çš„è´è¶æ“ä½œï¼Œå³é€šè¿‡E[k]å’ŒO[k]è®¡ç®—X[k]
+    // è´è¶æ“ä½œå‚è€ƒï¼šhttp://en.wikipedia.org/wiki/Butterfly_diagram
     for(int k = 0; k < step; k++) {
-      // ¼ÆËãomega^k. Õâ¸ö·½·¨Ğ§ÂÊµÍ£¬µ«Èç¹ûÓÃÃ¿´Î³ËomegaµÄ·½·¨µİÍÆ»áÓĞ¾«¶ÈÎÊÌâ¡£
-      // ÓĞ¸ü¿ì¸ü¾«È·µÄµİÍÆ·½·¨£¬ÎªÁËÇåÎúÆğ¼ûÕâÀïÂÔÈ¥
+      // è®¡ç®—omega^k. è¿™ä¸ªæ–¹æ³•æ•ˆç‡ä½ï¼Œä½†å¦‚æœç”¨æ¯æ¬¡ä¹˜omegaçš„æ–¹æ³•é€’æ¨ä¼šæœ‰ç²¾åº¦é—®é¢˜ã€‚
+      // æœ‰æ›´å¿«æ›´ç²¾ç¡®çš„é€’æ¨æ–¹æ³•ï¼Œä¸ºäº†æ¸…æ™°èµ·è§è¿™é‡Œç•¥å»
       CD omegak = exp(CD(0, alpha*k)); 
-      for(int Ek = k; Ek < n; Ek += step << 1) { // EkÊÇÄ³´ÎDFTºÏ²¢ÖĞE[k]ÔÚÔ­Ê¼ĞòÁĞÖĞµÄÏÂ±ê
-        int Ok = Ek + step; // OkÊÇ¸ÃDFTºÏ²¢ÖĞO[k]ÔÚÔ­Ê¼ĞòÁĞÖĞµÄÏÂ±ê
-        CD t = omegak * a[Ok]; // ºûµû²Ù×÷£ºx1 * omega^k
-        a[Ok] = a[Ek] - t;  // ºûµû²Ù×÷£ºy1 = x0 - t
-        a[Ek] += t;         // ºûµû²Ù×÷£ºy0 = x0 + t
+      for(int Ek = k; Ek < n; Ek += step << 1) { // Ekæ˜¯æŸæ¬¡DFTåˆå¹¶ä¸­E[k]åœ¨åŸå§‹åºåˆ—ä¸­çš„ä¸‹æ ‡
+        int Ok = Ek + step; // Okæ˜¯è¯¥DFTåˆå¹¶ä¸­O[k]åœ¨åŸå§‹åºåˆ—ä¸­çš„ä¸‹æ ‡
+        CD t = omegak * a[Ok]; // è´è¶æ“ä½œï¼šx1 * omega^k
+        a[Ok] = a[Ek] - t;  // è´è¶æ“ä½œï¼šy1 = x0 - t
+        a[Ek] += t;         // è´è¶æ“ä½œï¼šy0 = x0 + t
       }
     }
   }
@@ -44,11 +44,11 @@ inline void FFT(vector<CD> &a, bool inverse) {
     for(int i = 0; i < n; i++) a[i] /= n;
 }
 
-// ÓÃFFTÊµÏÖµÄ¿ìËÙ¶àÏîÊ½³Ë·¨
+// ç”¨FFTå®ç°çš„å¿«é€Ÿå¤šé¡¹å¼ä¹˜æ³•
 inline vector<double> operator * (const vector<double>& v1, const vector<double>& v2) {
   int s1 = v1.size(), s2 = v2.size(), S = 2;
   while(S < s1 + s2) S <<= 1;
-  vector<CD> a(S,0), b(S,0); // °ÑFFTµÄÊäÈë³¤¶È²¹³É2µÄÃİ£¬²»Ğ¡ÓÚv1ºÍv2µÄ³¤¶ÈÖ®ºÍ
+  vector<CD> a(S,0), b(S,0); // æŠŠFFTçš„è¾“å…¥é•¿åº¦è¡¥æˆ2çš„å¹‚ï¼Œä¸å°äºv1å’Œv2çš„é•¿åº¦ä¹‹å’Œ
   for(int i = 0; i < s1; i++) a[i] = v1[i];
   FFT(a, false);
   for(int i = 0; i < s2; i++) b[i] = v2[i];
@@ -56,11 +56,11 @@ inline vector<double> operator * (const vector<double>& v1, const vector<double>
   for(int i = 0; i < S; i++) a[i] *= b[i];
   FFT(a, true);
   vector<double> res(s1 + s2 - 1);
-  for(int i = 0; i < s1 + s2 - 1; i++) res[i] = a[i].real(); // Ğé²¿¾ùÎª0
+  for(int i = 0; i < s1 + s2 - 1; i++) res[i] = a[i].real(); // è™šéƒ¨å‡ä¸º0
   return res;
 }
 
-/////////// ÌâÄ¿Ïà¹Ø
+/////////// é¢˜ç›®ç›¸å…³
 #include<cstdio>
 #include<cstring>
 const int maxn = 50000 + 10;
