@@ -7,3 +7,7 @@
 代码组织与调试（Writing and Debugging Complex Codes）
 
 LA2727/UVa1024 A Linking Loader 刘汝佳
+
+几何专题（Selected Topics in Geometry）
+
+UVa 1497（LA5719） A Letter to Programmers 陈锋
